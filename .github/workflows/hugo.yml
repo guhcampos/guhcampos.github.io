@@ -4,6 +4,8 @@ on:
   push:
     branches: ["main"]
   workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'  # Run every 6 hours to sync new content
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -26,18 +28,41 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HUGO_VERSION: 0.147.7
+      OBSIDIAN_VAULT: ${{ github.workspace }}/obsidian-vault
+      HUGO_CONTENT: ${{ github.workspace }}/content
     steps:
-      - name: Checkout
+      - name: Checkout website repository
         uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
+
+      - name: Checkout Obsidian vault
+        uses: actions/checkout@v4
+        with:
+          repository: guhcampos/guhcampos-obsidian
+          token: ${{ secrets.OBSIDIAN_PAT }}
+          path: obsidian-vault
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: '0.147.7'
           extended: true
+
+      - name: Sync Obsidian content
+        run: python scripts/sync-obsidian
 
       - name: Setup Pages
         id: pages

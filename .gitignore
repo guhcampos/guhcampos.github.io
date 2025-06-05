@@ -21,4 +21,10 @@ hugo.linux
 ehthumbs.db
 Thumbs.db
 
+# Content directory - generated from Obsidian
+/content/
+
+# Log files
+/logs/
+
 .envrc
