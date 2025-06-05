@@ -26,37 +26,18 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HUGO_VERSION: 0.147.7
-      OBSIDIAN_VAULT: ${{ github.workspace }}/obsidian-vault
-      HUGO_CONTENT: ${{ github.workspace }}/content
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Checkout Obsidian vault
-        uses: actions/checkout@v4
         with:
-          repository: guhcampos/guhcampos-obsidian
-          token: ${{ secrets.OBSIDIAN_PAT }}
-          path: obsidian-vault
+          submodules: recursive
+          fetch-depth: 0
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
         with:
-          python-version: '3.11'
-          cache: 'pip'
-
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pyyaml
-
-      - name: Install Hugo CLI
-        run: |
-          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
-          && sudo dpkg -i ${{ runner.temp }}/hugo.deb
-
-      - name: Sync Obsidian content
-        run: python scripts/sync-obsidian
+          hugo-version: '0.147.7'
+          extended: true
 
       - name: Setup Pages
         id: pages
@@ -64,7 +45,6 @@ jobs:
 
       - name: Build with Hugo
         env:
-          # For maximum backward compatibility with Hugo modules
           HUGO_ENVIRONMENT: production
           HUGO_ENV: production
         run: |
