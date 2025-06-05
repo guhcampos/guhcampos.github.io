@@ -1,0 +1,264 @@
+#!/usr/bin/env python3
+
+import os
+import re
+import shutil
+import yaml
+from pathlib import Path
+from datetime import datetime
+from typing import Optional, Dict, List, Set
+
+OBSIDIAN_VAULT = Path("/Users/gustavo/workspace/guhcampos/guhcampos-obsidian")
+HUGO_CONTENT = Path("/Users/gustavo/workspace/guhcampos/guhcampos.github.io/content")
+
+def clean_title(title):
+    """Remove numeric prefixes and clean up title."""
+    # Remove leading numbers (e.g., "01.02.03 Title" -> "Title")
+    title = re.sub(r'^\d+(\.\d+)*\s*', '', title)
+    return title.strip()
+
+def clean_path(path):
+    """Clean path components for URLs."""
+    # Remove numeric prefixes from path components and convert to lowercase
+    parts = [clean_title(part).lower().replace(' ', '-') for part in path.parts]
+    return Path(*parts)
+
+def determine_section(file_path: Path) -> str:
+    """Determine the section based on the file path."""
+    relative_path = file_path.relative_to(OBSIDIAN_VAULT)
+    first_dir: Optional[str] = relative_path.parts[0] if len(relative_path.parts) > 1 else None
+
+    # Map Obsidian directories to Hugo sections
+    section_mapping = {
+        "03 Writing": "blog",  # Blog posts
+        "02 Topics": "topics",  # Documentation/Knowledge base
+        "10 Lists": "lists",   # Lists
+        "01 Resources": "resources",  # Resources
+    }
+
+    # Get the mapped section or use a default
+    return section_mapping.get(str(first_dir) if first_dir else "", "pages")
+
+def is_published(file_path: Path) -> bool:
+    """Check if a file is marked for publishing."""
+    with open(file_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    frontmatter, _ = extract_frontmatter(content)
+    return frontmatter.get('publish', False)
+
+def find_published_notes(directory: Path) -> Set[Path]:
+    """Find all published notes in a directory and its subdirectories."""
+    published = set()
+    for file_path in directory.rglob('*.md'):
+        if '.trash' not in str(file_path) and '.git' not in str(file_path):
+            if is_published(file_path):
+                published.add(file_path)
+    return published
+
+def process_index_file(source_path: Path, dest_path: Path):
+    """Process an index file (folder description) from Obsidian to Hugo."""
+    with open(source_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    frontmatter, content = extract_frontmatter(content)
+
+    # If no frontmatter exists, create one with the title
+    if not frontmatter:
+        frontmatter = {
+            'title': clean_title(source_path.parent.name),
+            'draft': False
+        }
+
+    # Convert content
+    content = convert_obsidian_links(content)
+
+    # Create Hugo content
+    hugo_content = f'---\n{yaml.dump(frontmatter)}---\n\n{content}'
+
+    # Create parent directories if they don't exist
+    dest_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Write the file
+    with open(dest_path, 'w', encoding='utf-8') as f:
+        f.write(hugo_content)
+
+    print(f'Processed index: {source_path.relative_to(OBSIDIAN_VAULT)} -> {dest_path.relative_to(HUGO_CONTENT)}')
+
+def extract_frontmatter(content):
+    """Extract YAML frontmatter from markdown content."""
+    if content.startswith('---\n'):
+        parts = content.split('---\n', 2)
+        if len(parts) >= 3:
+            try:
+                frontmatter = yaml.safe_load(parts[1])
+                return frontmatter, parts[2]
+            except yaml.YAMLError:
+                return {}, content
+    return {}, content
+
+def convert_obsidian_links(content):
+    """Convert Obsidian-style links to Hugo markdown."""
+    # Convert [[Page Name]] to [Page Name](page-name)
+    content = re.sub(r'\[\[(.*?)\]\]', lambda m: f'[{clean_title(m.group(1))}]({clean_title(m.group(1)).lower().replace(" ", "-")})', content)
+
+    # Convert ![[image.png]] to ![](image.png)
+    content = re.sub(r'!\[\[(.*?)\]\]', r'![](\1)', content)
+
+    # Convert callouts to Hugo shortcodes
+    content = re.sub(r'> \[!(\w+)\](.*?)\n', r'{{< callout \1 >}}\2{{< /callout >}}\n', content)
+
+    return content
+
+def determine_resource_category(file_path: Path) -> Optional[str]:
+    """Determine the resource category based on the file path."""
+    relative_path = file_path.relative_to(OBSIDIAN_VAULT)
+    if len(relative_path.parts) < 3:  # Must be at least "01 Resources/category/file.md"
+        return None
+
+    # The category is the second path component under "01 Resources"
+    category = clean_title(relative_path.parts[1])
+    return category.lower()
+
+def process_file(file_path: Path):
+    """Process a single markdown file."""
+    with open(file_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    frontmatter, content = extract_frontmatter(content)
+
+    # Skip if not marked for publishing
+    if not frontmatter.get('publish', False):
+        return
+
+    # Convert content
+    content = convert_obsidian_links(content)
+
+    # Determine the section
+    section = determine_section(file_path)
+
+    # Clean up the title
+    title = frontmatter.get('title', clean_title(file_path.stem))
+
+    # Prepare Hugo frontmatter
+    hugo_frontmatter = {
+        'title': title,
+        'date': frontmatter.get('date', datetime.now().strftime('%Y-%m-%d')),
+        'lastmod': datetime.now().strftime('%Y-%m-%d'),
+        'draft': False
+    }
+
+    # Add section-specific frontmatter
+    if section == "blog":
+        hugo_frontmatter['type'] = "post"
+
+    elif section == "resources":
+        hugo_frontmatter['type'] = "page"
+
+        # Set the category based on the subdirectory
+        category = determine_resource_category(file_path)
+        if category:
+            hugo_frontmatter['categories'] = [category]
+
+    else:
+        hugo_frontmatter['type'] = "page"
+
+    # Copy over other relevant frontmatter fields
+    for key in ['tags', 'description', 'aliases', 'weight']:
+        if key in frontmatter:
+            hugo_frontmatter[key] = frontmatter[key]
+
+    # If frontmatter already has categories and we're not in resources section,
+    # preserve them
+    if 'categories' in frontmatter and section != "resources":
+        hugo_frontmatter['categories'] = frontmatter['categories']
+
+    # Create Hugo content
+    hugo_content = f'---\n{yaml.dump(hugo_frontmatter)}---\n\n{content}'
+
+    # Determine output path
+    relative_path = file_path.relative_to(OBSIDIAN_VAULT)
+    clean_relative_path = clean_path(relative_path)
+
+    # For blog posts, put them directly in the blog section
+    if section == "blog":
+        output_path = HUGO_CONTENT / "blog" / clean_relative_path.name
+    else:
+        # For other content, maintain the hierarchy under the appropriate section
+        # Skip the first component (which determines the section) and use the rest
+        if len(clean_relative_path.parts) > 1:
+            subsection_path = clean_relative_path.parts[1:]
+            output_path = HUGO_CONTENT / section / Path(*subsection_path)
+        else:
+            output_path = HUGO_CONTENT / section / clean_relative_path.name
+
+    # Create parent directories if they don't exist
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Write the file
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write(hugo_content)
+
+    print(f'Processed: {relative_path} -> {output_path.relative_to(HUGO_CONTENT)}')
+
+def main():
+    """Main function to sync Obsidian vault to Hugo."""
+    # Create content directory if it doesn't exist
+    HUGO_CONTENT.mkdir(parents=True, exist_ok=True)
+
+    # Clear existing content
+    for item in HUGO_CONTENT.glob('*'):
+        if item.is_file():
+            item.unlink()
+        else:
+            shutil.rmtree(item)
+
+    # Process section index files first
+    sections = {
+        "03 Writing": "blog",
+        "02 Topics": "topics",
+        "10 Lists": "lists",
+        "01 Resources": "resources",
+    }
+
+    # Find all published notes first
+    published_notes = set()
+    for obsidian_dir in sections.keys():
+        dir_path = OBSIDIAN_VAULT / obsidian_dir
+        if dir_path.exists():
+            published_notes.update(find_published_notes(dir_path))
+
+    # Get all directories that contain published notes
+    published_dirs = {note.parent for note in published_notes}
+
+    # Process main section index files only if they have published content
+    for obsidian_dir, hugo_dir in sections.items():
+        dir_path = OBSIDIAN_VAULT / obsidian_dir
+        if dir_path.exists() and any(dir_path in note.parents for note in published_notes):
+            index_file = dir_path / f"{obsidian_dir}.md"
+            if index_file.exists():
+                hugo_index = HUGO_CONTENT / hugo_dir / "_index.md"
+                process_index_file(index_file, hugo_index)
+
+    # Process all markdown files
+    for file_path in published_notes:
+        # Skip the main section index files as they were already processed
+        if any(file_path == OBSIDIAN_VAULT / section / f"{section}.md" for section in sections.keys()):
+            continue
+
+        # Check if this is a subsection index file
+        if file_path.stem == file_path.parent.name:
+            # This is an index file, convert it to _index.md only if directory has published content
+            if file_path.parent in published_dirs:
+                relative_path = file_path.relative_to(OBSIDIAN_VAULT)
+                section = determine_section(file_path)
+                if len(relative_path.parts) > 1:
+                    subsection_path = clean_path(Path(*relative_path.parts[1:-1]))
+                    hugo_index = HUGO_CONTENT / section / subsection_path / "_index.md"
+                    process_index_file(file_path, hugo_index)
+        else:
+            # Regular content file
+            process_file(file_path)
+
+if __name__ == '__main__':
+    main()

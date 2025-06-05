@@ -1,0 +1,46 @@
+disabled = false
+languageCode = "en"
+languageName = "English"
+weight = 1
+title = "guhcampos"
+
+[params]
+displayName = "EN"
+isoCode = "en"
+rtl = false
+dateFormat = "2 January 2006"
+description = "Guhcampos Digital Garden"
+
+  [params.author]
+  name = "Gustavo Campos"
+  email = "guhcampos@gmail.com"
+  headline = "Brazilian, Millenial, Tinkerer, SCUBA diver, Nerd."
+  bio = "Brazilian, Millenial, Tinkerer, Nerd. I write about random stuff and for some reason I decided to start publishing it."
+
+    [[params.author.links]]
+    github = "https://github.com/guhcampos"
+
+    [[params.author.links]]
+    gitlab = "https://gitlab.com/guhcampos"
+
+    [[params.author.links]]
+    instagram = "https://www.instagram.com/guhcampos.stuff/"
+
+    [[params.author.links]]
+    lastfm = "https://www.last.fm/user/guhcampos"
+
+    [[params.author.links]]
+    linkedin = "https://www.linkedin.com/in/gucampos/"
+
+    [[params.author.links]]
+    reddit = "https://www.reddit.com/user/guhcampos/"
+
+    [[params.author.links]]
+    spotify = "https://open.spotify.com/user/12132336829"
+
+    [[params.author.links]]
+    steam = "https://steamcommunity.com/id/guhcampos/"
+
+["params.author"]
+headline = "Brazilian, Millenial, Tinkerer, SCUBA diver, Nerd."
+bio = "I'm Gustavo Campos, a Software, Platform and Site Reliability Engineer based in Belo Horizonte, Brazil. This website is populated with random stuff I write and somehow still think I should publish even after proof-reading it."
