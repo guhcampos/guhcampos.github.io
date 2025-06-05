@@ -8,8 +8,8 @@ from pathlib import Path
 from datetime import datetime
 from typing import Optional, Dict, List, Set
 
-OBSIDIAN_VAULT = Path("/Users/gustavo/workspace/guhcampos/guhcampos-obsidian")
-HUGO_CONTENT = Path("/Users/gustavo/workspace/guhcampos/guhcampos.github.io/content")
+OBSIDIAN_VAULT = Path(os.getenv('OBSIDIAN_VAULT', ''))
+HUGO_CONTENT = Path(os.getenv('HUGO_CONTENT', ''))
 
 def clean_title(title):
     """Remove numeric prefixes and clean up title."""
@@ -215,10 +215,10 @@ def main():
 
     # Process section index files first
     sections = {
-        "03 Writing": "blog",
-        "02 Topics": "topics",
-        "10 Lists": "lists",
         "01 Resources": "resources",
+        "02 Topics": "topics",
+        "03 Writing": "blog",
+        "10 Lists": "lists",
     }
 
     # Find all published notes first
