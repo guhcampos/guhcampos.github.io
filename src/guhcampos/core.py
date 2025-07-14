@@ -16,7 +16,9 @@ class HugoBuilder:
     def validate_setup(self) -> bool:
         """Validate that Hugo is properly set up."""
         if not self.hugo_dir.exists():
-            console.print(f"[red]Error: Hugo directory '{self.hugo_dir}' does not exist[/red]")
+            console.print(
+                f"[red]Error: Hugo directory '{self.hugo_dir}' does not exist[/red]"
+            )
             return False
 
         if not (self.hugo_dir / "hugo.toml").exists():
@@ -66,10 +68,14 @@ class HugoBuilder:
         if verbose:
             cmd.append("--verbose")
 
-        cmd.extend([
-            "--source", str(self.hugo_dir),
-            "--destination", str(self.output_dir),
-        ])
+        cmd.extend(
+            [
+                "--source",
+                str(self.hugo_dir),
+                "--destination",
+                str(self.output_dir),
+            ]
+        )
 
         # Execute build
         try:
@@ -88,7 +94,9 @@ class HugoBuilder:
             return True
 
         except subprocess.CalledProcessError as e:
-            console.print(f"\n[red]Error: Hugo build failed with exit code {e.returncode}[/red]")
+            console.print(
+                f"\n[red]Error: Hugo build failed with exit code {e.returncode}[/red]"
+            )
             if e.stdout:
                 console.print(f"\n[dim]stdout:[/dim]\n{e.stdout}")
             if e.stderr:
@@ -101,7 +109,9 @@ class HugoBuilder:
             return None
 
         total_files = sum(1 for _ in self.output_dir.rglob("*") if _.is_file())
-        total_size = sum(f.stat().st_size for f in self.output_dir.rglob("*") if f.is_file())
+        total_size = sum(
+            f.stat().st_size for f in self.output_dir.rglob("*") if f.is_file()
+        )
 
         return {
             "files": total_files,
