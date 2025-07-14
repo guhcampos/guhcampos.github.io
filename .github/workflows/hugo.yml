@@ -33,8 +33,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ${{ secrets.OBSIDIAN_VAULT }}
-          token: ${{ secrets.OBSIDIAN_DEPLOY_KEY }}
+          ssh-key: ${{ secrets.OBSIDIAN_DEPLOY_KEY }}
           path: build/obsidian-vault
+          fetch-depth: 1
 
       - name: install uv
         uses: astral-sh/setup-uv@v6
