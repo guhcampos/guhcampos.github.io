@@ -1,0 +1,35 @@
+# Project Structure Guide
+
+This is a personal website project using Hugo with Python build tools. The project has a hybrid structure:
+
+## Core Structure
+- [hugo/](mdc:hugo/) - Contains all Hugo-related content (the actual website)
+- [src/guhcampos/](mdc:src/guhcampos/) - Python package with build tools and CLI
+- [tests/](mdc:tests/) - Python tests for the build tools
+- [build/](mdc:build/) - Generated build artifacts (gitignored)
+
+## Key Configuration Files
+- [pyproject.toml](mdc:pyproject.toml) - Python project configuration and dependencies
+- [hugo/hugo.toml](mdc:hugo/hugo.toml) - Hugo site configuration
+- [.envrc](mdc:.envrc) - Environment variables for development
+- [.gitmodules](mdc:.gitmodules) - Git submodules (Hugo themes)
+
+## Python Package Structure
+- [src/guhcampos/cli.py](mdc:src/guhcampos/cli.py) - Click-based CLI entry point
+- [src/guhcampos/hugo.py](mdc:src/guhcampos/hugo.py) - Hugo-specific operations
+- [src/guhcampos/spotify/](mdc:src/guhcampos/spotify/) - Spotify API integration
+- [src/guhcampos/settings.py](mdc:src/guhcampos/settings.py) - Configuration management
+
+## Development Tools
+- Uses `uv` for Python dependency management
+- Ruff for linting and formatting
+- Pytest for testing
+- VS Code configuration in [.vscode/](mdc:.vscode/)
+
+## Build Process
+The Python package provides CLI commands to build and serve the Hugo site, with
+additional integrations for Spotify playlists and other content sources.
+description:
+globs:
+alwaysApply: false
+---

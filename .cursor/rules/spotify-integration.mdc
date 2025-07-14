@@ -1,0 +1,46 @@
+# Spotify Integration Guide
+
+## Architecture
+- Spotify integration in [src/guhcampos/spotify/](mdc:src/guhcampos/spotify/)
+- [src/guhcampos/spotify/client.py](mdc:src/guhcampos/spotify/client.py) - API client and business logic
+- [src/guhcampos/spotify/models.py](mdc:src/guhcampos/spotify/models.py) - Pydantic models for data validation
+
+## Key Patterns
+- Use Pydantic models for API responses (SpotifyPlaylist, SpotifyTrack)
+- Implement pagination using generators in `fetch_playlists()`
+- Use environment variables for API credentials
+- Save playlists as M3U files for Hugo integration
+
+## API Usage
+- Client credentials flow for authentication
+- Pagination with offset/limit for playlists
+- Track sorting by artist and name
+- Error handling with console output
+
+## Data Models
+- `SpotifyPlaylist`: Playlist metadata with tracks
+- `SpotifyTrack`: Track information with duration
+- `to_m3u()` method for playlist export
+- `to_json()` method for data serialization
+
+
+## Testing
+- Mock API responses in [tests/test_spotify.py](mdc:tests/test_spotify.py)
+- Use `tmp_path` fixture for file operations
+- Test pagination with realistic mock data
+- Test both success and error scenarios
+
+## Configuration
+- Spotify credentials in environment variables
+- Output directory configurable via CLI
+- Playlist filtering by name
+- Progress reporting with Rich console
+
+## File Formats
+- M3U format for playlist export
+- JSON format for data storage
+- Proper URL validation with Pydantic HttpUrl
+description:
+globs:
+alwaysApply: false
+---
