@@ -1,24 +1,17 @@
-name: Deploy Hugo site to Pages
+name: build guhcampos.github.io
 
 on:
   push:
     branches: ["main"]
-  workflow_dispatch:
-  schedule:
-    - cron: '0 */6 * * *'  # Run every 6 hours to sync new content
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
-  pages: write
   id-token: write
 
-# Allow only one concurrent deployment
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
-# Default to bash
 defaults:
   run:
     shell: bash
@@ -27,48 +20,43 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      HUGO_VERSION: 0.147.7
+      HUGO_VERSION: 0.148.1
       OBSIDIAN_VAULT: ${{ github.workspace }}/obsidian-vault
       HUGO_CONTENT: ${{ github.workspace }}/content
     steps:
-      - name: Checkout website repository
+      - name: checkout website repository
         uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Checkout Obsidian vault
+      - name: checkout obsidian vault
         uses: actions/checkout@v4
         with:
-          repository: guhcampos/guhcampos-obsidian
+          repository: ${{ secrets.OBSIDIAN_VAULT }}
           token: ${{ secrets.OBSIDIAN_PAT }}
-          path: obsidian-vault
+          path: build/obsidian-vault
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-          cache: 'pip'
+      - name: install uv
+        uses: astral-sh/setup-uv@v6
 
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pyyaml
+      - name: install python
+        run: uv python install
 
-      - name: Setup Hugo
+      - name: install hugo
         uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: '0.147.7'
           extended: true
 
-      - name: Sync Obsidian content
-        run: python scripts/sync-obsidian
+      - name: install python dependencies
+        run: uv sync --locked --all-extras --dev
 
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v4
+      - name: build website content
+        run: uv run build
 
-      - name: Build with Hugo
+
+      - name: build hugo website
         env:
           HUGO_ENVIRONMENT: production
           HUGO_ENV: production
@@ -77,19 +65,25 @@ jobs:
             --gc \
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
+      - name: setup Pages
+        id: pages
+        uses: actions/configure-pages@v4
 
-      - name: Upload artifact
+      - name: upload artifacts
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
 
   deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
     steps:
-      - name: Deploy to GitHub Pages
+      - name: deploy to github pages
         id: deployment
         uses: actions/deploy-pages@v4
