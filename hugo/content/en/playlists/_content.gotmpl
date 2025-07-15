@@ -1,0 +1,38 @@
+{{ .EnableAllLanguages }}
+{{ $data := .Site.Data.books }}
+{{ range $data }}
+
+  {{ $content := dict "mediaType" "text/markdown" "value" .summary }}
+  {{ $dates := dict "date" (time.AsTime .date) }}
+  {{ $params := dict "author" .author "isbn" .isbn "rating" .rating "tags" .tags }}
+  {{ $page := dict
+    "content" $content
+    "dates" $dates
+    "kind" "page"
+    "params" $params
+    "path" .title
+    "title" .title
+  }}
+  {{ $.AddPage $page }}
+
+  {{ $item := . }}
+  {{ with $url := $item.cover }}
+    {{ with try (resources.GetRemote $url) }}
+      {{ with .Err }}
+        {{ errorf "Unable to get remote resource %s: %s" $url . }}
+      {{ else with .Value }}
+        {{ $content := dict "mediaType" .MediaType.Type "value" .Content }}
+        {{ $params := dict "alt" $item.title }}
+        {{ $resource := dict
+          "content" $content
+          "params" $params
+          "path" (printf "%s/cover.%s" $item.title .MediaType.SubType)
+        }}
+        {{ $.AddResource $resource }}
+      {{ else }}
+        {{ errorf "Unable to get remote resource %s" $url }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+
+{{ end }}

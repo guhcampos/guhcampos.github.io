@@ -18,7 +18,7 @@ class Settings(BaseSettings):
         "This is Guhcampos",
         "01.01 Beard Growing",
     ]
-    spotify_playlists_output_dir: Path = REPO_ROOT / "build" / "spotify-playlists"
+    spotify_playlists_output_dir: Path = REPO_ROOT / "hugo" / "static" / "playlists"
 
 
-settings = Settings()
+settings = Settings()  # type: ignore

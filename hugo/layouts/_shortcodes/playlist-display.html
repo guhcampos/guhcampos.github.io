@@ -1,0 +1,352 @@
+{{ $playlist_id := .Get "playlist_id" }}
+{{ $playlist_data := index .Site.Data.playlists $playlist_id }}
+
+{{ if $playlist_data }}
+{{ $total_duration := 0 }}
+{{ range $playlist_data.tracks }}
+    {{ $total_duration = add $total_duration (div .duration_ms 1000) }}
+{{ end }}
+<div class="playlist-container" data-playlist-id="{{ $playlist_data.id }}">
+    <div class="playlist-header">
+        <h2>{{ $playlist_data.name }}</h2>
+        <p class="playlist-description">{{ $playlist_data.description }}</p>
+        <div class="playlist-meta">
+            <span>Created by: {{ $playlist_data.owner }}</span>
+            <span>{{ len $playlist_data.tracks }} tracks</span>
+            <span>{{ printf "%.0f" (div $total_duration 60.0) }} minutes</span>
+        </div>
+        <div class="playlist-actions">
+            <a href="/playlists/{{ $playlist_id }}.m3u" class="btn btn-primary" download>
+                Download M3U
+            </a>
+            <a href="/playlists/{{ $playlist_id }}.json" class="btn btn-secondary" download>
+                Download JSON
+            </a>
+            <a href="{{ $playlist_data.url }}" class="btn btn-outline" target="_blank">
+                Open in Spotify
+            </a>
+        </div>
+    </div>
+
+    <div class="playlist-controls">
+        <div class="search-box">
+            <input type="text" id="search-{{ $playlist_data.id }}" placeholder="Search tracks..." class="form-control">
+        </div>
+        <div class="sort-controls">
+            <label for="sort-{{ $playlist_data.id }}">Sort by:</label>
+            <select id="sort-{{ $playlist_data.id }}" class="form-control">
+                <option value="artist">Artist</option>
+                <option value="album">Album</option>
+                <option value="name">Track Name</option>
+                <option value="duration">Duration</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="playlist-table" id="table-{{ $playlist_data.id }}">
+            <thead>
+                <tr>
+                    <th data-sort="artist">Artist</th>
+                    <th data-sort="album">Album</th>
+                    <th data-sort="name">Track</th>
+                    <th data-sort="duration">Duration</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range $playlist_data.tracks }}
+                <tr data-artist="{{ index .artists 0 }}" data-album="{{ .album }}" data-name="{{ .name }}" data-duration="{{ div .duration_ms 1000 }}">
+                    <td>{{ index .artists 0 }}</td>
+                    <td>{{ .album }}</td>
+                    <td>{{ .name }}</td>
+                    <td>{{ printf "%d:%02d" (div (div .duration_ms 1000) 60) (mod (div .duration_ms 1000) 60) }}</td>
+                    <td>
+                        <a href="{{ .url }}" target="_blank" class="btn btn-sm btn-outline">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+.playlist-container {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.playlist-header {
+    margin-bottom: 1.5rem;
+}
+
+.playlist-header h2 {
+    margin: 0 0 0.5rem 0;
+    color: #2c3e50;
+}
+
+.playlist-description {
+    color: #6c757d;
+    margin-bottom: 1rem;
+}
+
+.playlist-meta {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.playlist-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: white;
+    border: 1px solid #007bff;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+    border-color: #0056b3;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+    border: 1px solid #6c757d;
+}
+
+.btn-secondary:hover {
+    background: #545b62;
+    border-color: #545b62;
+}
+
+.btn-outline {
+    background: transparent;
+    color: #007bff;
+    border: 1px solid #007bff;
+}
+
+.btn-outline:hover {
+    background: #007bff;
+    color: white;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.playlist-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.search-box {
+    flex: 1;
+    min-width: 200px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.sort-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sort-controls label {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.playlist-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.playlist-table th,
+.playlist-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #e1e5e9;
+}
+
+.playlist-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+}
+
+.playlist-table th:hover {
+    background: #e9ecef;
+}
+
+.playlist-table th[data-sort]::after {
+    content: " ↕";
+    opacity: 0.5;
+}
+
+.playlist-table th[data-sort].asc::after {
+    content: " ↑";
+    opacity: 1;
+}
+
+.playlist-table th[data-sort].desc::after {
+    content: " ↓";
+    opacity: 1;
+}
+
+.playlist-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+@media (max-width: 768px) {
+    .playlist-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .playlist-actions {
+        justify-content: center;
+    }
+
+    .playlist-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const playlistId = '{{ $playlist_data.id }}';
+    const searchInput = document.getElementById('search-' + playlistId);
+    const sortSelect = document.getElementById('sort-' + playlistId);
+    const table = document.getElementById('table-' + playlistId);
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+
+    let currentSort = 'artist';
+    let currentDirection = 'asc';
+
+    // Search functionality
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+    });
+
+    // Sort functionality
+    sortSelect.addEventListener('change', function() {
+        const newSort = this.value;
+        if (newSort === currentSort) {
+            currentDirection = currentDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentSort = newSort;
+            currentDirection = 'asc';
+        }
+        sortTable();
+    });
+
+    // Click on headers to sort
+    table.querySelectorAll('th[data-sort]').forEach(th => {
+        th.addEventListener('click', function() {
+            const newSort = this.dataset.sort;
+            if (newSort === currentSort) {
+                currentDirection = currentDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort = newSort;
+                currentDirection = 'asc';
+            }
+            sortSelect.value = newSort;
+            sortTable();
+        });
+    });
+
+    function sortTable() {
+        // Update header indicators
+        table.querySelectorAll('th[data-sort]').forEach(th => {
+            th.classList.remove('asc', 'desc');
+            if (th.dataset.sort === currentSort) {
+                th.classList.add(currentDirection);
+            }
+        });
+
+        // Sort rows
+        const sortedRows = rows.sort((a, b) => {
+            let aValue, bValue;
+
+            switch (currentSort) {
+                case 'artist':
+                    aValue = a.dataset.artist.toLowerCase();
+                    bValue = b.dataset.artist.toLowerCase();
+                    break;
+                case 'album':
+                    aValue = a.dataset.album.toLowerCase();
+                    bValue = b.dataset.album.toLowerCase();
+                    break;
+                case 'name':
+                    aValue = a.dataset.name.toLowerCase();
+                    bValue = b.dataset.name.toLowerCase();
+                    break;
+                case 'duration':
+                    aValue = parseInt(a.dataset.duration);
+                    bValue = parseInt(b.dataset.duration);
+                    break;
+                default:
+                    return 0;
+            }
+
+            if (aValue < bValue) return currentDirection === 'asc' ? -1 : 1;
+            if (aValue > bValue) return currentDirection === 'asc' ? 1 : -1;
+            return 0;
+        });
+
+        // Reorder DOM
+        sortedRows.forEach(row => tbody.appendChild(row));
+    }
+});
+</script>
+{{ else }}
+<div class="playlist-error">
+    <p>Playlist data not found for ID: {{ $playlist_id }}</p>
+</div>
+{{ end }}

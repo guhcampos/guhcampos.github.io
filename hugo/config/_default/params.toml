@@ -18,6 +18,17 @@ verification = { }
 rssnext = { }
 highlightCurrentMenuArea = ""
 smartTOC = true
+[author]
+
+[[author.links]]
+github = "https://github.com/guhcampos"
+gitlab = "https://gitlab.com/guhcampos"
+instagram = "https://www.instagram.com/guhcampos.stuff/"
+lastfm = "https://www.last.fm/user/guhcampos"
+linkedin = "https://www.linkedin.com/in/gucampos/"
+reddit = "https://www.reddit.com/user/guhcampos/"
+spotify = "https://open.spotify.com/user/12132336829"
+steam = "https://steamcommunity.com/id/guhcampos/"
 
 [header]
 layout = "basic"

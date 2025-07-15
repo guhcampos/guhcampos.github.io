@@ -1,3 +1,23 @@
 [hugoVersion]
   extended = false
   min = "0.87.0"
+
+[[module.mounts]]
+source = 'static/playlists'
+target = 'data/playlists'
+includeFiles = ['*.json']
+
+[[module.mounts]]
+source = 'content/en'
+target = 'content'
+lang = 'en'
+
+[[module.mounts]]
+source = 'content/pt'
+target = 'content'
+lang = 'pt'
+
+[[module.mounts]]
+source = 'content/en'
+target = 'content'
+lang = 'pt'

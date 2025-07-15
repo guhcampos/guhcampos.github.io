@@ -1,0 +1,18 @@
+contentDir = "content/pt"
+languageCode = "pt-br"
+languageName = "Português"
+title = "guhcampos br"
+weight = 2
+
+[params]
+displayName = "pt-br"
+isoCode = "pt-BR"
+rtl = false
+dateFormat = "2 January 2006"
+description = "Guhcampos Digital Garden"
+
+  [params.author]
+  name = "Gustavo Campos"
+  email = "guhcampos@gmail.com"
+  headline = "Brasileiro, Millenial, Gambiarreiro, Mergulhador, Nerd."
+  bio = "Escrevo sobre coisas aleatórias e, por algum motivo, decidi começar a publicar."

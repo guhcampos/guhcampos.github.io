@@ -1,0 +1,172 @@
+{{ $playlists := where .Site.RegularPages "Section" "playlists" }}
+{{ $playlists_data := .Site.Data.playlists }}
+
+<div class="playlists-index">
+    <div class="playlists-grid">
+        {{ range $playlists }}
+        {{ $playlist_id := .Params.playlist_id }}
+        {{ $playlist_data := index $playlists_data $playlist_id }}
+        {{ if $playlist_data }}
+        {{ $total_duration := 0 }}
+        {{ range $playlist_data.tracks }}
+            {{ $total_duration = add $total_duration (div .duration_ms 1000) }}
+        {{ end }}
+        <div class="playlist-card">
+            <div class="playlist-card-header">
+                <h3><a href="{{ .RelPermalink }}">{{ $playlist_data.name }}</a></h3>
+                <p class="playlist-description">{{ $playlist_data.description }}</p>
+            </div>
+            <div class="playlist-card-meta">
+                <span class="meta-item">
+                    <i class="fas fa-user"></i>
+                    {{ $playlist_data.owner }}
+                </span>
+                <span class="meta-item">
+                    <i class="fas fa-music"></i>
+                    {{ len $playlist_data.tracks }} tracks
+                </span>
+                <span class="meta-item">
+                    <i class="fas fa-clock"></i>
+                    {{ printf "%.0f" (div $total_duration 60.0) }} min
+                </span>
+            </div>
+            <div class="playlist-card-actions">
+                <a href="{{ .RelPermalink }}" class="btn btn-primary btn-sm">
+                    View Playlist
+                </a>
+                <a href="/playlists/{{ $playlist_id }}.m3u" class="btn btn-outline btn-sm" download>
+                    M3U
+                </a>
+                <a href="/playlists/{{ $playlist_id }}.json" class="btn btn-outline btn-sm" download>
+                    JSON
+                </a>
+            </div>
+        </div>
+        {{ end }}
+        {{ end }}
+    </div>
+</div>
+
+<style>
+.playlists-index {
+    margin: 2rem 0;
+}
+
+.playlists-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.playlist-card {
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    padding: 1.5rem;
+    background: #fff;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.playlist-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+}
+
+.playlist-card-header h3 {
+    margin: 0 0 0.5rem 0;
+    color: #2c3e50;
+}
+
+.playlist-card-header h3 a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.playlist-card-header h3 a:hover {
+    color: #007bff;
+}
+
+.playlist-description {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 0 0 1rem 0;
+    line-height: 1.4;
+}
+
+.playlist-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.meta-item i {
+    width: 14px;
+}
+
+.playlist-card-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+    border-color: #0056b3;
+}
+
+.btn-outline {
+    background: transparent;
+    color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-outline:hover {
+    background: #007bff;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .playlists-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .playlist-card-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .playlist-card-actions {
+        justify-content: center;
+    }
+}
+</style>
