@@ -2,6 +2,10 @@
   extended = false
   min = "0.87.0"
 
+[[module.imports]]
+  path = "blowfish"
+  disable = false
+
 [[module.mounts]]
 source = 'static/playlists'
 target = 'data/playlists'

@@ -15,11 +15,15 @@ summaryLength = 0
     path = "blowfish"
     disable = false
 
+  [[module.mounts]]
+    source = 'static/playlists'
+    target = 'data/playlists'
+    includeFiles = ['*.json']
+
 [pagination]
   pagerSize = 10
 
 [taxonomies]
-  category = "categories"
   series = "series"
   tag = "tags"
   topic = "topics"

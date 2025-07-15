@@ -1,38 +1,33 @@
 {{ .EnableAllLanguages }}
-{{ $data := .Site.Data.books }}
-{{ range $data }}
+{{ $playlists := .Site.Data.playlists }}
+{{ range $playlist_id, $playlist_data := $playlists }}
 
-  {{ $content := dict "mediaType" "text/markdown" "value" .summary }}
-  {{ $dates := dict "date" (time.AsTime .date) }}
-  {{ $params := dict "author" .author "isbn" .isbn "rating" .rating "tags" .tags }}
+  {{ $content := printf "{{< playlist-display playlist_id=\"%s\" >}}" $playlist_id }}
+  {{ $content := dict "mediaType" "text/markdown" "value" $content }}
+
+  {{ $dates := dict "date" (time.AsTime "2024-01-01") }}
+
+    {{ $total_duration := 0 }}
+  {{ range $playlist_data.tracks }}
+    {{ $total_duration = add $total_duration .duration_ms }}
+  {{ end }}
+
+  {{ $params := dict
+    "playlist_id" $playlist_id
+    "title" $playlist_data.name
+    "description" $playlist_data.description
+    "tracks_count" (len $playlist_data.tracks)
+    "duration_ms" $total_duration
+  }}
+
   {{ $page := dict
     "content" $content
     "dates" $dates
     "kind" "page"
     "params" $params
-    "path" .title
-    "title" .title
+    "path" $playlist_id
+    "title" $playlist_data.name
   }}
   {{ $.AddPage $page }}
-
-  {{ $item := . }}
-  {{ with $url := $item.cover }}
-    {{ with try (resources.GetRemote $url) }}
-      {{ with .Err }}
-        {{ errorf "Unable to get remote resource %s: %s" $url . }}
-      {{ else with .Value }}
-        {{ $content := dict "mediaType" .MediaType.Type "value" .Content }}
-        {{ $params := dict "alt" $item.title }}
-        {{ $resource := dict
-          "content" $content
-          "params" $params
-          "path" (printf "%s/cover.%s" $item.title .MediaType.SubType)
-        }}
-        {{ $.AddResource $resource }}
-      {{ else }}
-        {{ errorf "Unable to get remote resource %s" $url }}
-      {{ end }}
-    {{ end }}
-  {{ end }}
 
 {{ end }}

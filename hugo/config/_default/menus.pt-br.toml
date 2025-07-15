@@ -1,18 +1,17 @@
-
 [[main]]
 name = "Blog"
 pageRef = "posts"
 weight = 10
 
-# [[main]]
-#  name = "Música"
-#  weight = 20
+[[main]]
+ name = "Música"
+ weight = 20
 
-# [[main]]
-#  name = "Playlists"
-#  parent = "Música"
-#  pageRef = "playlists"
-#  weight = 20
+[[main]]
+name = "Playlists"
+parent = "Música"
+pageRef = "playlists"
+weight = 20
 
 # [[main]]
 #  name = "Recursos"
@@ -32,6 +31,6 @@ pageRef = "tags"
 weight = 10
 
 [[footer]]
-name = "Categorias"
-pageRef = "categorias"
+name = "Tópicos"
+pageRef = "topics"
 weight = 20

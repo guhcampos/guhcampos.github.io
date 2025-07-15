@@ -10,3 +10,5 @@ else out there.
 Having them here also helps me not be a prisioner of any one music listening
 service: as I have them all in JSON and M3U formats, I can easily migrate them
 between different services if I so wish to.
+
+{{< playlists-index >}}
