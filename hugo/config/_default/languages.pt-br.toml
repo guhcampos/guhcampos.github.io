@@ -1,7 +1,7 @@
-contentDir = "content/pt"
+contentDir = "content/pt-br"
 languageCode = "pt-br"
 languageName = "Português"
-title = "guhcampos br"
+title = "guhcampos"
 weight = 2
 
 [params]

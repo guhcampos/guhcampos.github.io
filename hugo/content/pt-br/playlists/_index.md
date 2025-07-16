@@ -1,5 +1,18 @@
 ---
 title: Playlists
+
+cascade:
+  params:
+    showRecent: false
+    showAuthor: false
+    showDate: false
+    showWordCount: false
+    showReadingTime: false
+
+tags:
+  - music
+topics:
+  - music
 ---
 
 A vida inteira eu escutei música no shuffle. Salvo raros álbums que precisam ser

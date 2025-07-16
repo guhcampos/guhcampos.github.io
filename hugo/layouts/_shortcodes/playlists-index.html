@@ -1,388 +1,166 @@
+<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+
 {{ $playlists := where .Site.RegularPages "Section" "playlists" }}
 {{ $playlists_data := .Site.Data.playlists }}
 
-<div class="playlists-index">
-
-    <div class="playlists-grid">
-        {{ range $playlists }}
-        {{ $playlist_id := .Params.playlist_id }}
-        {{ $playlist_data := index $playlists_data $playlist_id }}
-        {{ if $playlist_data }}
-        {{ $total_duration := 0 }}
-        {{ range $playlist_data.tracks }}
-            {{ $total_duration = add $total_duration (div .duration_ms 1000) }}
-        {{ end }}
-
-        <article class="playlist-card" data-playlist-id="{{ $playlist_id }}">
-            <div class="playlist-card-header">
-                <div class="playlist-card-title">
-                    <h3><a href="{{ .RelPermalink }}">{{ $playlist_data.name }}</a></h3>
-                    {{ if $playlist_data.description }}
-                    <p class="playlist-card-description">{{ $playlist_data.description }}</p>
-                    {{ end }}
-                </div>
-
-                <div class="playlist-card-cover">
-                    {{ if $playlist_data.images }}
-                    <img src="{{ index $playlist_data.images 0 "url" }}"
-                         alt="Playlist cover for {{ $playlist_data.name }}"
-                         loading="lazy"
-                         class="playlist-cover-image">
-                    {{ else }}
-                    <div class="playlist-cover-placeholder">
-                        <i class="icon-music"></i>
+<div class="space-y-8">
+    <section class="w-full grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {{/* Pin 'This is Guhcampos' first if it exists */}}
+        {{ $pinned_id := "this-is-guhcampos" }}
+        {{ $pinned := where $playlists "Params.playlist_id" $pinned_id | first 1 }}
+        {{ with index $pinned 0 }}
+            {{ $playlist_id := .Params.playlist_id }}
+            {{ if and $playlist_id (index $playlists_data $playlist_id) }}
+                {{ $playlist_data := index $playlists_data $playlist_id }}
+                {{ $total_duration := 0 }}
+                {{ range $playlist_data.tracks }}
+                    {{ $total_duration = add $total_duration .duration_ms }}
+                {{ end }}
+                {{ $duration_minutes := div $total_duration 60000 | int }}
+                <article class="border border-neutral-200 dark:border-neutral-700 border-2 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-neutral-800 dark:text-neutral-200 mb-2">
+                                    <a href="{{ .RelPermalink }}" class="decoration-primary-500 hover:underline hover:underline-offset-2">
+                                        {{ $playlist_data.name | emojify }}
+                                    </a>
+                                </h3>
+                                {{ if $playlist_data.description }}
+                                <p class="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2">
+                                    {{ $playlist_data.description }}
+                                </p>
+                                {{ end }}
+                            </div>
+                            <div class="flex-shrink-0 ml-4">
+                                <div class="w-16 h-16 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
+                                    <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.369 4.369 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+                            <div class="flex items-center space-x-4">
+                                <span class="flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    {{ len $playlist_data.tracks }} {{ i18n "playlists.tracks" | default "tracks" }}
+                                </span>
+                                <span class="flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                    </svg>
+                                    {{ $duration_minutes }} {{ i18n "playlists.minutes" | default "min" }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <a href="{{ .RelPermalink }}" class="flex-1 bg-primary-500 hover:bg-primary-600 text-white text-center py-2 px-4 rounded-md transition-colors duration-200 text-sm font-medium">
+                                {{ i18n "playlists.view" | default "View Playlist" }}
+                            </a>
+                            <div class="relative group">
+                                <button class="bg-neutral-100 dark:bg-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-600 text-neutral-700 dark:text-neutral-300 p-2 rounded-md transition-colors duration-200">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                                    </svg>
+                                </button>
+                                <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-neutral-800 rounded-md shadow-lg border border-neutral-200 dark:border-neutral-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+                                    <div class="py-1">
+                                        <a href="/static/playlists/{{ $playlist_id }}.json" download class="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700">
+                                            {{ i18n "playlists.download_json" | default "Download JSON" }}
+                                        </a>
+                                        <a href="/static/playlists/{{ $playlist_id }}.m3u" download class="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700">
+                                            {{ i18n "playlists.download_m3u" | default "Download M3U" }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </article>
+            {{ end }}
+        {{ end }}
+
+        {{/* Render all other playlists sorted by name, skipping the pinned one */}}
+        {{ $sorted := sort $playlists "Title" }}
+        {{ range $sorted }}
+            {{ if ne .Params.playlist_id $pinned_id }}
+                {{ $playlist_id := .Params.playlist_id }}
+                {{ if and $playlist_id (index $playlists_data $playlist_id) }}
+                    {{ $playlist_data := index $playlists_data $playlist_id }}
+                    {{ $total_duration := 0 }}
+                    {{ range $playlist_data.tracks }}
+                        {{ $total_duration = add $total_duration .duration_ms }}
                     {{ end }}
-                </div>
-            </div>
-
-            <div class="playlist-card-meta">
-                <div class="meta-item">
-                    <i class="icon-user"></i>
-                    <span>{{ $playlist_data.owner }}</span>
-                </div>
-                <div class="meta-item">
-                    <i class="icon-music"></i>
-                    <span>{{ len $playlist_data.tracks }} tracks</span>
-                </div>
-                <div class="meta-item">
-                    <i class="icon-clock"></i>
-                    <span>{{ printf "%.0f" (div $total_duration 60.0) }} min</span>
-                </div>
-            </div>
-
-            <div class="playlist-card-actions">
-                <a href="{{ .RelPermalink }}" class="btn btn-primary">
-                    <i class="icon-eye"></i>
-                    View Playlist
-                </a>
-                <div class="download-actions">
-                    <a href="/playlists/{{ $playlist_id }}.m3u"
-                       class="btn btn-outline btn-sm"
-                       download
-                       title="Download M3U playlist">
-                        <i class="icon-download"></i>
-                        M3U
-                    </a>
-                    <a href="/playlists/{{ $playlist_id }}.json"
-                       class="btn btn-outline btn-sm"
-                       download
-                       title="Download JSON playlist">
-                        <i class="icon-download"></i>
-                        JSON
-                    </a>
-                </div>
-            </div>
-        </article>
+                    {{ $duration_minutes := div $total_duration 60000 | int }}
+                    <article class="border border-neutral-200 dark:border-neutral-700 border-2 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex-1">
+                                    <h3 class="text-xl font-bold text-neutral-800 dark:text-neutral-200 mb-2">
+                                        <a href="{{ .RelPermalink }}" class="decoration-primary-500 hover:underline hover:underline-offset-2">
+                                            {{ $playlist_data.name | emojify }}
+                                        </a>
+                                    </h3>
+                                    {{ if $playlist_data.description }}
+                                    <p class="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2">
+                                        {{ $playlist_data.description }}
+                                    </p>
+                                    {{ end }}
+                                </div>
+                                <div class="flex-shrink-0 ml-4">
+                                    <div class="w-16 h-16 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
+                                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.369 4.369 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+                                <div class="flex items-center space-x-4">
+                                    <span class="flex items-center">
+                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        {{ len $playlist_data.tracks }} {{ i18n "playlists.tracks" | default "tracks" }}
+                                    </span>
+                                    <span class="flex items-center">
+                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                        </svg>
+                                        {{ $duration_minutes }} {{ i18n "playlists.minutes" | default "min" }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <a href="{{ .RelPermalink }}" class="flex-1 bg-primary-500 hover:bg-primary-600 text-white text-center py-2 px-4 rounded-md transition-colors duration-200 text-sm font-medium">
+                                    {{ i18n "playlists.view" | default "View Playlist" }}
+                                </a>
+                                <div class="relative group">
+                                    <button class="bg-neutral-100 dark:bg-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-600 text-neutral-700 dark:text-neutral-300 p-2 rounded-md transition-colors duration-200">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                                        </svg>
+                                    </button>
+                                    <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-neutral-800 rounded-md shadow-lg border border-neutral-200 dark:border-neutral-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+                                        <div class="py-1">
+                                            <a href="/static/playlists/{{ $playlist_id }}.json" download class="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700">
+                                                {{ i18n "playlists.download_json" | default "Download JSON" }}
+                                            </a>
+                                            <a href="/static/playlists/{{ $playlist_id }}.m3u" download class="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700">
+                                                {{ i18n "playlists.download_m3u" | default "Download M3U" }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                {{ end }}
+            {{ end }}
         {{ end }}
-        {{ end }}
-    </div>
-
-    {{ if not $playlists }}
-    <div class="no-playlists">
-        <div class="no-playlists-content">
-            <i class="icon-music"></i>
-            <h3>No Playlists Yet</h3>
-            <p>Playlists will appear here once they're added to the site.</p>
-        </div>
-    </div>
-    {{ end }}
+    </section>
 </div>
 
-<style>
-.playlists-index {
-    --primary-color: #1db954;
-    --primary-hover: #1ed760;
-    --secondary-color: #6c757d;
-    --border-color: #e1e5e9;
-    --background-light: #f8f9fa;
-    --text-primary: #2c3e50;
-    --text-secondary: #6c757d;
-    --shadow: 0 2px 8px rgba(0,0,0,0.1);
-    --shadow-hover: 0 8px 25px rgba(0,0,0,0.15);
-
-    margin: 2rem 0;
-}
-
-/* Header Styles */
-.playlists-header {
-    text-align: center;
-    margin-bottom: 3rem;
-    padding: 0 1rem;
-}
-
-.playlists-header h2 {
-    margin: 0 0 1rem 0;
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
-}
-
-.playlists-description {
-    margin: 0;
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-/* Grid Layout */
-.playlists-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 2rem;
-    padding: 0 1rem;
-}
-
-/* Card Styles */
-.playlist-card {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    transition: all 0.3s ease;
-    border: 1px solid var(--border-color);
-}
-
-.playlist-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-hover);
-    border-color: var(--primary-color);
-}
-
-.playlist-card-header {
-    display: flex;
-    gap: 1rem;
-    padding: 1.5rem;
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
-    color: white;
-}
-
-.playlist-card-title {
-    flex: 1;
-}
-
-.playlist-card-title h3 {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-    line-height: 1.3;
-}
-
-.playlist-card-title h3 a {
-    color: white;
-    text-decoration: none;
-    transition: opacity 0.2s ease;
-}
-
-.playlist-card-title h3 a:hover {
-    opacity: 0.9;
-}
-
-.playlist-card-description {
-    margin: 0;
-    font-size: 0.9rem;
-    opacity: 0.9;
-    line-height: 1.4;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.playlist-card-cover {
-    flex-shrink: 0;
-    width: 80px;
-    height: 80px;
-    border-radius: 8px;
-    overflow: hidden;
-    background: rgba(255,255,255,0.1);
-}
-
-.playlist-cover-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.playlist-cover-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    opacity: 0.7;
-}
-
-/* Meta Information */
-.playlist-card-meta {
-    padding: 1rem 1.5rem;
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.meta-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-}
-
-.meta-item i {
-    font-size: 1rem;
-}
-
-/* Actions */
-.playlist-card-actions {
-    padding: 1rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-}
-
-.download-actions {
-    display: flex;
-    gap: 0.5rem;
-}
-
-/* Button Styles */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-}
-
-.btn-primary {
-    background: var(--primary-color);
-    color: white;
-}
-
-.btn-primary:hover {
-    background: var(--primary-hover);
-    transform: translateY(-1px);
-}
-
-.btn-outline {
-    background: transparent;
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
-}
-
-.btn-outline:hover {
-    background: var(--background-light);
-    border-color: var(--primary-color);
-    color: var(--primary-color);
-}
-
-.btn-sm {
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
-}
-
-/* No Playlists State */
-.no-playlists {
-    text-align: center;
-    padding: 4rem 2rem;
-    color: var(--text-secondary);
-}
-
-.no-playlists-content i {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-    opacity: 0.5;
-}
-
-.no-playlists-content h3 {
-    margin: 0 0 0.5rem 0;
-    color: var(--text-primary);
-}
-
-.no-playlists-content p {
-    margin: 0;
-    font-size: 1.1rem;
-}
-
-/* Icons */
-.icon-user::before { content: "👤"; }
-.icon-music::before { content: "🎵"; }
-.icon-clock::before { content: "⏱️"; }
-.icon-eye::before { content: "👁️"; }
-.icon-download::before { content: "⬇️"; }
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .playlists-header h2 {
-        font-size: 2rem;
-    }
-
-    .playlists-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-
-    .playlist-card-header {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .playlist-card-cover {
-        align-self: center;
-    }
-
-    .playlist-card-meta {
-        justify-content: center;
-    }
-
-    .playlist-card-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .download-actions {
-        justify-content: center;
-    }
-}
-
-@media (max-width: 480px) {
-    .playlists-header {
-        margin-bottom: 2rem;
-    }
-
-    .playlists-header h2 {
-        font-size: 1.75rem;
-    }
-
-    .playlists-description {
-        font-size: 1rem;
-    }
-
-    .playlist-card {
-        margin: 0 -1rem;
-        border-radius: 0;
-        border-left: none;
-        border-right: none;
-    }
-
-    .playlist-card-header,
-    .playlist-card-meta,
-    .playlist-card-actions {
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
-}
-</style>

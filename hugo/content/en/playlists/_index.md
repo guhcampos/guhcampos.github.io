@@ -1,5 +1,18 @@
 ---
 title: Playlists
+
+cascade:
+  params:
+    showRecent: false
+    showAuthor: false
+    showDate: false
+    showWordCount: false
+    showReadingTime: false
+
+tags:
+  - music
+topics:
+  - music
 ---
 
 I'm a shuffle type of music listener, and as such I make heavy use of playlists

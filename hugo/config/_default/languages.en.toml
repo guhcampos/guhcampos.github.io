@@ -1,7 +1,7 @@
 contentDir = "content/en"
 languageCode = "en"
 languageName = "English"
-title = "guhcampos en"
+title = "guhcampos"
 weight = 1
 
 [params]

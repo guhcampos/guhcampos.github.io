@@ -1,4 +1,5 @@
 import base64
+import html
 from collections.abc import Generator
 from pathlib import Path
 
@@ -7,9 +8,9 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
-console = Console()
-
 from .models import SpotifyPlaylist, SpotifyTrack
+
+console = Console()
 
 
 class SpotifyAPI:
@@ -71,17 +72,16 @@ class SpotifyAPI:
                 if not playlists:
                     break
 
-                yield from [
-                    SpotifyPlaylist(
-                        description=playlist["description"],
+                for playlist in playlists:
+                    console.print(playlist)
+                    yield SpotifyPlaylist(
+                        description=html.unescape(playlist["description"]),
                         owner=playlist["owner"]["display_name"],
                         url=playlist["external_urls"]["spotify"],
                         id=playlist["id"],
                         name=playlist["name"],
                         tracks=[],  # playlist["tracks"],
                     )
-                    for playlist in playlists
-                ]
 
                 if len(playlists) < limit:
                     break
