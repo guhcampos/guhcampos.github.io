@@ -8,6 +8,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
+from ..jdecimal import strip_jdecimal_id
 from .models import SpotifyPlaylist, SpotifyTrack
 
 console = Console()
@@ -52,7 +53,7 @@ class SpotifyAPI:
         Yield all playlists for a given user.
         """
         headers = {"Authorization": f"Bearer {self.access_token}"}
-        limit = 50  # Maximum allowed by Spotify API
+        limit = 50  # Maximum allowed by Spotify API on a single paginated request
         offset = 0
 
         while True:
@@ -78,8 +79,8 @@ class SpotifyAPI:
                         owner=playlist["owner"]["display_name"],
                         url=playlist["external_urls"]["spotify"],
                         id=playlist["id"],
-                        name=playlist["name"],
-                        tracks=[],  # playlist["tracks"],
+                        name=strip_jdecimal_id(playlist["name"]),
+                        tracks=[],  # self.get_playlist_tracks(playlist["id"]),
                     )
 
                 if len(playlists) < limit:

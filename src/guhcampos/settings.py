@@ -26,8 +26,8 @@ class Settings(BaseSettings):
     spotify_user_id: str
     spotify_playlists: list[str] = [
         "This is Guhcampos",
-        "01.01 Beard Growing",
-        "01.04 Banda Indie Canta Hey!",
+        "Beard Growing",
+        "Banda Indie Canta Hey!",
     ]
     spotify_playlists_output_dir: Path = REPO_ROOT / "hugo" / "static" / "playlists"
 

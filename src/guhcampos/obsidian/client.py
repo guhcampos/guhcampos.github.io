@@ -1,4 +1,3 @@
-import re
 from collections.abc import Generator
 from pathlib import Path
 from typing import Any
@@ -6,6 +5,7 @@ from typing import Any
 import yaml
 from loguru import logger
 
+from ..jdecimal import strip_jdecimal_id
 from ..utils import ensure_dir
 from .errors import ObsidianPostError
 from .models import ObsidianPost
@@ -46,9 +46,6 @@ def gen_published_posts(src: Path) -> Generator[ObsidianPost, Any, Any]:
 
 
 def parse_obsidian_note(data: str, series: str | None = None) -> ObsidianPost:
-    def _strip_id(s: str) -> str:
-        return re.sub(r"^\d+(\.\d+)+\s", "", s)
-
     def _parse_tags(tags: list[str]) -> list[str]:
         tagset = set()
 
@@ -70,7 +67,7 @@ def parse_obsidian_note(data: str, series: str | None = None) -> ObsidianPost:
 
         return ObsidianPost(
             content=content.strip("\n"),
-            title=_strip_id(title.strip("# ").strip("\n")),
+            title=strip_jdecimal_id(title.strip("# ").strip("\n")),
             tags=tags,
             **frontmatter,
         )

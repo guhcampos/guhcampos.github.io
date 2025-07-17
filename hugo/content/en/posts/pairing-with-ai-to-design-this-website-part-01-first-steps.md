@@ -2,11 +2,11 @@
 date: 2025-07-16
 title: Pairing with AI to Design This Website Part 01 - First Steps
 tags:
-- software
-- ai
-- engineering
-- web-development
 - tech
+- web-development
+- ai
+- software
+- engineering
 
 ---
 ## Everything Begins with an Idea

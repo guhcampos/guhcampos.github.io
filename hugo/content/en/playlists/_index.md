@@ -24,3 +24,9 @@ else out there.
 Having them here also helps me not be a prisioner of any one music listening
 service: as I have them all in JSON and M3U formats, I can easily migrate them
 between different services if I so wish to.
+
+These playlists are exported directly from my [Spotify account](https://open.spotify.com/user/12132336829)
+where you can find quite a few more, some receive more love than others.
+
+I'm always open to getting music recommendations, so if you want to share something,
+let me know!
