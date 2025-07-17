@@ -26,4 +26,3 @@ dados em formato JSON e M3U, facilitando a importação desses dados em outras
 plataformas, assim não fico preso a uma plataforma tipo Spotify, impedido de
 mudar pra não perder minhas amadas playlists.
 
-{{< playlists-index >}}

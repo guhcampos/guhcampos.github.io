@@ -2,11 +2,15 @@ import click
 from rich.console import Console
 
 from .hugo import build_hugo
+from .logging import setup_logging
+from .obsidian.client import pull_obsidian_content
 from .settings import settings
 from .spotify.client import (
     fetch_spotify_playlists,
     list_spotify_playlists,
 )
+
+setup_logging(logdir=settings.log_dir)
 
 console = Console()
 
@@ -24,6 +28,19 @@ def hugo():
 @hugo.command()
 def build() -> None:
     build_hugo(src=settings.hugo_src_dir, dst=settings.hugo_dst_dir)
+
+
+@guhcampos.group()
+def obsidian():
+    pass
+
+
+@obsidian.command()
+def pull() -> None:
+    pull_obsidian_content(
+        posts_path=settings.obsidian_vault_root / "03 Posts",
+        dst_dir=settings.obsidian_content_output_dir,
+    )
 
 
 @guhcampos.group()

@@ -10,8 +10,7 @@
 {{ end }}
 {{- end -}}
 
-{{ $toc := and (.Params.showTableOfContents | default (.Site.Params.list.showTableOfContents | default false)) (in
-.TableOfContents "<ul") }} <header>
+<header>
   {{ if .Params.showBreadcrumbs | default (.Site.Params.list.showBreadcrumbs | default false) }}
   {{ partial "breadcrumbs.html" . }}
   {{ end }}
@@ -31,26 +30,10 @@
   <script type="text/javascript" src="{{ $jsPage.RelPermalink }}" integrity="{{ $jsPage.Data.Integrity }}" data-oid="views_{{ $path }}" data-oid-likes="likes_{{ $path }}"></script>
   {{ end }}
   </header>
-  <section class="{{ if $toc -}}
-      mt-12
-    {{- else -}}
-      mt-0
-    {{- end }} prose flex max-w-full flex-col dark:prose-invert lg:flex-row">
-    {{ if $toc }}
-    <div class="order-first px-0 lg:order-last lg:max-w-xs ltr:lg:pl-8 rtl:lg:pr-8">
-      <div class="toc ltr:pl-5 rtl:pr-5 lg:sticky {{ if hasPrefix .Site.Params.header.layout "fixed" -}}
-      lg:top-[140px]{{ else }}lg:top-10{{ end }}">
-        {{ partial "toc.html" . }}
-      </div>
-    </div>
-    {{ end }}
+  <section class="mt-0 prose flex max-w-full flex-col dark:prose-invert lg:flex-row">
     <div class="min-w-0 min-h-0 max-w-prose">
       {{ .Content }}
     </div>
-
-
-
-
   </section>
   {{ if gt .Pages 0 }}
 
@@ -94,7 +77,7 @@
           </h2>
         <section class="w-full grid gap-4 sm:grid-cols-2 md:grid-cols-3 {{ if $cardViewScreenWidth }} xl:grid-cols-4 2xl:grid-cols-5 {{ end }}">
           {{ range .Pages }}
-          {{ partial "article-link/card.html" . }}
+          {{ partial "article-link/playlist-card.html" . }}
           {{ end }}
         </section>
         {{ if $cardViewScreenWidth }} </div> {{ end }}
@@ -111,12 +94,12 @@
         {{ if not $orderByWeight }}
           {{ range (.Paginate (.Pages.GroupByDate "2006")).PageGroups }}
           {{ range .Pages }}
-          {{ partial "article-link/card.html" . }}
+          {{ partial "article-link/playlist-card.html" . }}
           {{ end }}
           {{ end }}
         {{ else }}
           {{ range (.Paginate (.Pages.ByWeight)).Pages }}
-          {{ partial "article-link/card.html" . }}
+          {{ partial "article-link/playlist-card.html" . }}
           {{ end }}
         {{ end }}
         </section>

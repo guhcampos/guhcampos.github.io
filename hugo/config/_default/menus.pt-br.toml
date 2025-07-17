@@ -13,11 +13,6 @@ parent = "Música"
 pageRef = "playlists"
 weight = 20
 
-# [[main]]
-#  name = "Recursos"
-#  pageRef = "recursos"
-#  weight = 20
-
 [[main]]
 name = "Sobre"
 pageRef = "about"
@@ -30,7 +25,7 @@ name = "Tags"
 pageRef = "tags"
 weight = 10
 
-[[footer]]
-name = "Tópicos"
-pageRef = "topics"
-weight = 20
+# [[footer]]
+# name = "Tópicos"
+# pageRef = "topics"
+# weight = 20

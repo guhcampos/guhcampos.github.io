@@ -1,8 +1,8 @@
-colorScheme = "blowfish"
+colorScheme = "ocean"
 defaultAppearance = "light"
 autoSwitchAppearance = true
 enableSearch = true
-enableCodeCopy = false
+enableCodeCopy = true
 replyByEmail = false
 mainSections = [ "Resources", "Topics", "Lists", "Tutorials" ]
 disableImageOptimization = false
@@ -31,7 +31,7 @@ spotify = "https://open.spotify.com/user/12132336829"
 steam = "https://steamcommunity.com/id/guhcampos/"
 
 [header]
-layout = "basic"
+layout = "fixed-fill-blur"
 
 [footer]
 showMenu = true
@@ -66,7 +66,7 @@ showDateUpdated = true
 showDraftLabel = true
 showEdit = false
 showHeadingAnchors = true
-showHero = false
+showHero = true
 showLikes = false
 showPagination = true
 showReadingTime = true
@@ -77,7 +77,7 @@ showWordCount = true
 showZenMode = false
 
 [list]
-showHero = false
+showHero = true
 layoutBackgroundBlur = true
 layoutBackgroundHeaderSpace = true
 showBreadcrumbs = false
@@ -88,7 +88,7 @@ showTableOfContents = false
 showCards = true
 orderByWeight = false
 groupByYear = true
-cardView = false
+cardView = true
 cardViewScreenWidth = false
 constrainItemsWidth = false
 
@@ -97,7 +97,7 @@ excludedKinds = [ "taxonomy", "term" ]
 
 [taxonomy]
 showTermCount = true
-showHero = false
+showHero = true
 showBreadcrumbs = false
 showViews = false
 showLikes = false
@@ -105,7 +105,7 @@ showTableOfContents = false
 cardView = false
 
 [term]
-showHero = false
+showHero = true
 showBreadcrumbs = false
 showViews = false
 showLikes = false

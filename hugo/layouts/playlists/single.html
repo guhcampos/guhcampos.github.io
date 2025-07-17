@@ -1,24 +1,16 @@
 {{ define "main" }}
-  {{ .Scratch.Set "scope" "single" }}
+{{ .Scratch.Set "scope" "single" }}
 
+{{ $total_duration := 0 }}
+{{ range .Params.tracks }}
+{{ $total_duration = add $total_duration .duration_ms }}
+{{ end }}
+{{ $duration_minutes := div $total_duration 60000 | int }}
 
-  <article>
-    {{ if .Params.showHero | default (.Site.Params.article.showHero | default false) }}
-      {{ $heroStyle := .Params.heroStyle }}
-      {{ if not $heroStyle }}{{ $heroStyle = .Site.Params.article.heroStyle }}{{ end }}
-      {{ $heroStyle := print "hero/" $heroStyle ".html" }}
-      {{ if templates.Exists ( printf "partials/%s" $heroStyle ) }}
-        {{ partial $heroStyle . }}
-      {{ else }}
-        {{ partial "hero/basic.html" . }}
-      {{ end }}
-    {{ end }}
-
+<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+<article class="max-w-full">
 
     <header id="single_header" class="mt-5 max-w-prose">
-      {{ if .Params.showBreadcrumbs | default (.Site.Params.article.showBreadcrumbs | default false) }}
-        {{ partial "breadcrumbs.html" . }}
-      {{ end }}
       <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
         {{ .Title | emojify }}
       </h1>
@@ -73,40 +65,163 @@
     </header>
 
     <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
-      {{ if or (and (.Params.showTableOfContents | default (.Site.Params.article.showTableOfContents | default false)) (in
-        .TableOfContents "<ul")) (.Site.Params.article.showRelatedPosts | default false)
-      }}
-        <div class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8">
-          <div
-            class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky {{ if hasPrefix .Site.Params.header.layout "fixed" -}}
-              lg:top-[140px]
-            {{ else }}
-              lg:top-10
-            {{ end }}
-            ">
-            {{ if and (.Params.showTableOfContents | default (.Site.Params.article.showTableOfContents | default false)) (in
-              .TableOfContents "<ul")
-            }}
-              {{ partial "toc.html" . }}
-            {{ end }}
-            {{ if .Site.Params.article.showRelatedPosts |
-              default false
-            }}
-              sd
-            {{ end }}
-          </div>
-        </div>
-      {{ end }}
-
 
       <div class="min-w-0 min-h-0 max-w-fit">
         {{ partial "series/series.html" . }}
+        <div class="max-w-prose text-lg opacity-90 mb-8">
+            {{ .Params.description | safeHTML }}
+        </div>
 
 
-        <div class="article-content max-w mb-20">
+        <iframe style="border-radius:12px"
+        src="{{ replace $.Params.url "playlist" "embed/playlist" }}?utm_source=generator"
+        width="100%"
+        height="200"
+        frameBorder="0"
+        allowfullscreen=""
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+        >
+        </iframe>
+
+        <div class="article-content  mb-20">
+            <div
+            class="space-y-6 from-primary-500 to-secondary-500 rounded-lg p-6 text-white"
+            data-playlist-id="{{ $.Params.id }}"
+          >
+            <div class="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="w-full">
+                  <thead class="bg-neutral-50 dark:bg-neutral-700">
+                    <tr>
+                      <th
+                        class="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-600"
+                        data-sort="title"
+                      >
+                        {{ i18n "playlists.title" | default "Title" }}
+                        <svg
+                          class="inline w-3 h-3 ml-1 sort-icon"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </th>
+                      <th
+                        class="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-600"
+                        data-sort="artist"
+                      >
+                        {{ i18n "playlists.artist" | default "Artist" }}
+                        <svg
+                          class="inline w-3 h-3 ml-1 sort-icon"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </th>
+                      <th
+                        class="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-600"
+                        data-sort="album"
+                      >
+                        {{ i18n "playlists.album" | default "Album" }}
+                        <svg
+                          class="inline w-3 h-3 ml-1 sort-icon"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </th>
+                      <th
+                        class="px-3 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-600 w-28"
+                        data-sort="duration"
+                      >
+                        {{ i18n "playlists.duration" | default "Time" }}
+                        <svg
+                          class="inline w-3 h-3 ml-1 sort-icon"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody
+                    id="tracks-tbody"
+                    class="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700"
+                  >
+                    {{ range $index, $track := $.Params.tracks }} {{
+                    $track_duration_seconds := div .duration_ms 1000 }} {{ $minutes :=
+                    div $track_duration_seconds 60 | int }} {{ $seconds := mod
+                    $track_duration_seconds 60 | int }}
+                    <tr
+                      class="track-row hover:bg-neutral-50 dark:hover:bg-neutral-700"
+                      data-title="{{ .name | lower }}"
+                      data-artist="{{ index .artists 0 | lower }}"
+                      data-album="{{ .album | lower }}"
+                      data-duration="{{ .duration_ms }}"
+                    >
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div
+                          class="text-sm font-medium text-neutral-900 dark:text-neutral-100"
+                        >
+                          {{ .name }}
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-neutral-900 dark:text-neutral-100">
+                          {{ index .artists 0 }}
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-neutral-900 dark:text-neutral-100">
+                          {{ .album }}
+                        </div>
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400 text-right"
+                      >
+                        {{ printf "%d:%02d" $minutes $seconds }}
+                      </td>
+                    </tr>
+                    {{ end }}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
           {{ .Content }}
           {{ $defaultReplyByEmail := .Site.Params.replyByEmail }}
           {{ $replyByEmail := default $defaultReplyByEmail .Params.replyByEmail }}
+          {{ if $replyByEmail }}
+            <strong class="block mt-8">
+              <a
+                target="_blank"
+                class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+                href="mailto:{{ .Site.Params.Author.email }}?subject={{ replace (printf "Reply to %s" .Title) "\"" "'" }}">
+                Reply by Email
+              </a>
+            </strong>
+          {{ end }}
         </div>
 
         {{ if (.Params.showAuthorBottom | default ( .Site.Params.article.showAuthorBottom | default false)) }}

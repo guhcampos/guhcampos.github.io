@@ -73,7 +73,6 @@ class SpotifyAPI:
                     break
 
                 for playlist in playlists:
-                    console.print(playlist)
                     yield SpotifyPlaylist(
                         description=html.unescape(playlist["description"]),
                         owner=playlist["owner"]["display_name"],

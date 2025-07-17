@@ -2,8 +2,10 @@
 {{ $playlists := .Site.Data.playlists }}
 {{ range $playlist_id, $playlist_data := $playlists }}
 
-  {{ $content := printf "{{< playlist-display playlist_id=\"%s\" >}}" $playlist_id }}
-  {{ $content := dict "mediaType" "text/markdown" "value" $content }}
+  {{ $content := dict
+    "mediaType" "text/markdown"
+    "value" ""
+  }}
 
   {{ $dates := dict "date" (time.AsTime "2024-01-01") }}
 
@@ -18,6 +20,8 @@
     "description" $playlist_data.description
     "tracks_count" (len $playlist_data.tracks)
     "duration_ms" $total_duration
+    "tracks" $playlist_data.tracks
+    "url" $playlist_data.url
   }}
 
   {{ $page := dict

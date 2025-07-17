@@ -11,6 +11,16 @@ class Settings(BaseSettings):
     hugo_src_dir: Path = REPO_ROOT / "hugo"
     hugo_dst_dir: Path = REPO_ROOT / "public"
 
+    log_dir: Path = REPO_ROOT / "log"
+
+    obsidian_vault_root: Path = REPO_ROOT / "obsidian"
+    # obsidian_content_output_dir: Path = REPO_ROOT / "hugo" / "build" / "obsidian"
+    obsidian_content_output_dir: Path = REPO_ROOT / "hugo/content"
+    obsidian_content_posts_dir: str = "03 Posts"
+    obsidian_content_mappings: dict[str, str] = {
+        "03 Posts": "posts",
+    }
+
     spotify_client_id: str
     spotify_client_secret: str
     spotify_user_id: str

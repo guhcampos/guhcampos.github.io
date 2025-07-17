@@ -1,0 +1,70 @@
+{{ $disableImageOptimization := .Page.Site.Params.disableImageOptimization | default false }}
+{{ $playlist_duration_ms := 0 }}
+{{ range $.Params.tracks }}
+    {{ $playlist_duration_ms = add $playlist_duration_ms .duration_ms }}
+{{ end }}
+{{ $playlist_duration := div $playlist_duration_ms 60000 | int }}
+
+  <a href="{{ .RelPermalink }}" class="min-w-full">
+    <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
+
+      {{- with $.Params.images -}}
+      {{- range first 6 . }}
+      <meta property="og:image" content="{{ . | absURL }}" />{{ end -}}
+      {{- else -}}
+      {{- $images := $.Resources.ByType "image" -}}
+      {{- $featured := $images.GetMatch "*feature*" -}}
+      {{- if not $featured }}{{ $featured = $images.GetMatch "{*cover*,*thumbnail*}" }}{{ end -}}
+      {{ if and .Params.featureimage (not $featured) }}
+      {{- $url:= .Params.featureimage -}}
+      {{ $featured = resources.GetRemote $url }}
+      {{ end }}
+      {{- if not $featured }}{{ with .Site.Params.defaultFeaturedImage }}{{ $featured = resources.Get . }}{{ end }}{{ end -}}
+      {{ if .Params.hideFeatureImage }}{{ $featured = false }}{{ end }}
+      {{- with $featured -}}
+      {{ if or $disableImageOptimization (strings.HasSuffix $featured ".svg")}}
+        {{ with . }}
+        <div class="w-full thumbnail_card nozoom" style="background-image:url({{ .RelPermalink }});"></div>
+        {{ end }}
+      {{ else }}
+        {{ with .Resize "600x" }}
+        <div class="w-full thumbnail_card nozoom" style="background-image:url({{ .RelPermalink }});"></div>
+        {{ end }}
+      {{ end }}
+      {{- else -}}
+      {{- with $.Site.Params.images }}
+      <meta property="og:image" content="{{ index . 0 | absURL }}" />{{ end -}}
+      {{- end -}}
+      {{- end -}}
+
+    <div class="px-6 py-4">
+        <div class="font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral" href="{{ .RelPermalink }}">
+          {{ .Title }}
+        </div>
+
+        <div class="text-sm text-neutral-500 dark:text-neutral-400 mt-2 h-24">
+          {{ $.Params.description }}
+        </div>
+
+        <div class="flex text-sm text-neutral-500 dark:text-neutral-400 mt-4">
+
+          <span class="flex items-center mr-2">
+            <svg class="w-6 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" clip-rule="evenodd"/>
+            </svg>
+            {{ len $.Params.tracks }} {{ i18n "playlists.tracks" | default "tracks" }}
+          </span>
+
+          <span class="flex items-center mr-2">
+            <svg class="w-6 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+            </svg>
+            {{ $playlist_duration }} {{ i18n "playlists.minutes" | default "min" }}
+          </span>
+        </div>
+      <div class="text-sm text-neutral-500 dark:text-neutral-400">
+        {{ partial "article-meta/basic.html" . }}
+      </div>
+    </div>
+  </div>
+</a>

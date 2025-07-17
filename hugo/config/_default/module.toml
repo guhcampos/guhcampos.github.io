@@ -1,6 +1,6 @@
 [hugoVersion]
   extended = false
-  min = "0.87.0"
+  min = "0.148.0"
 
 [[module.imports]]
   path = "blowfish"
@@ -25,3 +25,14 @@ lang = 'pt'
 source = 'content/en'
 target = 'content'
 lang = 'pt'
+
+
+[[module.mounts]]
+  source = "build/obsidian/en/posts"
+  target = "content/en/posts"
+  includeFiles = ['*.md']
+
+[[module.mounts]]
+  source = "build/obsidian/pt/posts]"
+  target = "content/pt/posts"
+  includeFiles = ['*.md']
