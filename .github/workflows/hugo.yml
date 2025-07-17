@@ -19,9 +19,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
+      GUHCAMPOS_OBSIDIAN_VAULT_ROOT: ${{ github.workspace }}/obsidian-vault
+      GUHCAMPOS_SPOTIFY_CLIENT_ID: ${{ secrets.GUHCAMPOS_SPOTIFY_CLIENT_ID }}
+      GUHCAMPOS_SPOTIFY_CLIENT_SECRET: ${{ secrets.GUHCAMPOS_SPOTIFY_CLIENT_SECRET }}
+      GUHCAMPOS_SPOTIFY_USER_ID: ${{ secrets.GUHCAMPOS_SPOTIFY_USER_ID }}
       HUGO_VERSION: 0.148.1
-      OBSIDIAN_VAULT: ${{ github.workspace }}/obsidian-vault
-      HUGO_CONTENT: ${{ github.workspace }}/content
     steps:
       - name: checkout website repository
         uses: actions/checkout@v4
@@ -46,7 +48,7 @@ jobs:
       - name: install hugo
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: '0.148.1'
+          hugo-version: ${{ env.HUGO_VERSION }}
           extended: true
 
       - name: install python dependencies
