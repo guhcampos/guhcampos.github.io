@@ -1,5 +1,9 @@
 """
 Johnny Decimal related utilities.
+
+I use a personal flavor of Johnny Decimal (https://johnnydecimal.com/) to
+organize my notes and content in general, and this module contains some utilities
+to facilitate publishing this content to the website.
 """
 
 import re

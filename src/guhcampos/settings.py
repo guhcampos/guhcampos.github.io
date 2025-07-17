@@ -14,7 +14,6 @@ class Settings(BaseSettings):
     log_dir: Path = REPO_ROOT / "log"
 
     obsidian_vault_root: Path = REPO_ROOT / "obsidian"
-    # obsidian_content_output_dir: Path = REPO_ROOT / "hugo" / "build" / "obsidian"
     obsidian_content_output_dir: Path = REPO_ROOT / "hugo/content"
     obsidian_content_posts_dir: str = "03 Posts"
     obsidian_content_mappings: dict[str, str] = {

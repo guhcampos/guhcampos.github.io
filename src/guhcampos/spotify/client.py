@@ -138,16 +138,9 @@ def fetch_spotify_playlists(
     client_secret: str,
 ):
     """
-    Fetch all Spotify playlists for a user and save them as M3U files.
+    Fetch all Spotify playlists for a user and save them as M3U and JSON files
+    on the provided output directory. Useful for making these available to Hugo.
 
-    Args:
-        user_id: Spotify user ID
-        output_dir: Directory to save M3U files
-        client_id: Spotify client ID
-        client_secret: Spotify client secret
-
-    Returns:
-        True if successful, False otherwise
     """
     spotify = SpotifyAPI(client_id, client_secret)
     spotify.authenticate()

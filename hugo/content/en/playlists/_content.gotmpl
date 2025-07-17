@@ -1,3 +1,11 @@
+{{/*
+
+Playlists are saved as JSON files in the static/playlists directory, and mounted
+into Hugo's `/data` directory to be made available as Data Sources for Hugo. This
+Content Adapter creates individual pages for each playlist under the `/playlists`
+page bundle.
+
+*/}}
 {{ .EnableAllLanguages }}
 {{ $playlists := .Site.Data.playlists }}
 {{ range $playlist_id, $playlist_data := $playlists }}
