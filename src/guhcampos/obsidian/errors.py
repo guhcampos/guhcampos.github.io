@@ -1,0 +1,2 @@
+class ObsidianPostError(Exception):
+    pass

@@ -1,0 +1,32 @@
+[[main]]
+name = "Blog"
+pageRef = "posts"
+weight = 10
+
+[[main]]
+ name = "Music"
+ weight = 20
+
+[[main]]
+name = "Playlists"
+parent = "Music"
+pageRef = "playlists"
+weight = 30
+
+
+[[main]]
+name = "About"
+pageRef = "about"
+weight = 50
+
+# ----------------
+
+[[footer]]
+name = "Tags"
+pageRef = "tags"
+weight = 10
+
+# [[footer]]
+# name = "Topics"
+# pageRef = "topics"
+# weight = 20

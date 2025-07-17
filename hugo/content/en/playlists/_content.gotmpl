@@ -1,0 +1,37 @@
+{{ .EnableAllLanguages }}
+{{ $playlists := .Site.Data.playlists }}
+{{ range $playlist_id, $playlist_data := $playlists }}
+
+  {{ $content := dict
+    "mediaType" "text/markdown"
+    "value" ""
+  }}
+
+  {{ $dates := dict "date" (time.AsTime "2024-01-01") }}
+
+    {{ $total_duration := 0 }}
+  {{ range $playlist_data.tracks }}
+    {{ $total_duration = add $total_duration .duration_ms }}
+  {{ end }}
+
+  {{ $params := dict
+    "playlist_id" $playlist_id
+    "title" $playlist_data.name
+    "description" $playlist_data.description
+    "tracks_count" (len $playlist_data.tracks)
+    "duration_ms" $total_duration
+    "tracks" $playlist_data.tracks
+    "url" $playlist_data.url
+  }}
+
+  {{ $page := dict
+    "content" $content
+    "dates" $dates
+    "kind" "page"
+    "params" $params
+    "path" $playlist_id
+    "title" $playlist_data.name
+  }}
+  {{ $.AddPage $page }}
+
+{{ end }}

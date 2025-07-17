@@ -1,0 +1,202 @@
+<table class="w-full">
+
+<thead class="bg-neutral-50 dark:bg-neutral-700">
+  <tr>
+    <th class="px-6 text-xs text-neutral-500 dark:text-neutral-400 uppercase cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-600" data-sort="title">
+    <p class="flex items-left">
+        <span class="relative block">{{ i18n "playlists.title" | default "Title" }}</span>
+        {{/*  {{ partial "icon.html" "table-sort" }}  */}}
+    </p>
+    </th>
+    <th class="px-6 text-xs text-neutral-500 dark:text-neutral-400 uppercase cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-600" data-sort="artist">
+      <p class="flex items-left">
+        <span class="relative block">{{ i18n "playlists.artist" | default "Artist" }}</span>
+        {{/*  {{ partial "icon.html" "table-sort" }}  */}}
+      </p>
+    </th>
+    <th class="px-6 text-xs text-neutral-500 dark:text-neutral-400 uppercase cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-600" data-sort="album">
+      <p class="flex items-left">
+        <span class="relative block"></span>{{ i18n "playlists.album" | default "Album" }}</span>
+        {{/*  {{ partial "icon.html" "table-sort" }}  */}}
+      </p>
+    </th>
+    <th class="px-6 text-xs text-neutral-500 dark:text-neutral-400 uppercase cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-600" data-sort="album">
+      <p class="flex items-left">
+        <span class="relative block"></span>{{ i18n "playlists.duration" | default "Time" }}</span>
+        {{/*  {{ partial "icon.html" "table-sort" }}  */}}
+      </p>
+    </th>
+  </tr>
+</thead>
+<tbody id="tracks-tbody" class="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
+{{ range $index, $track := $.Params.tracks }} {{
+$track_duration_seconds := div .duration_ms 1000 }} {{ $minutes :=
+div $track_duration_seconds 60 | int }} {{ $seconds := mod
+$track_duration_seconds 60 | int }}
+<tr
+  class="track-row hover:bg-neutral-50 dark:hover:bg-neutral-700"
+  data-title="{{ .name | lower }}"
+  data-artist="{{ index .artists 0 | lower }}"
+  data-album="{{ .album | lower }}"
+  data-duration="{{ .duration_ms }}"
+>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <div
+      class="text-sm font-medium text-neutral-900 dark:text-neutral-100"
+    >
+      {{ .name }}
+    </div>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <div class="text-sm text-neutral-900 dark:text-neutral-100">
+      {{ index .artists 0 }}
+    </div>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <div class="text-sm text-neutral-900 dark:text-neutral-100">
+      {{ .album }}
+    </div>
+  </td>
+  <td
+    class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400 text-right"
+  >
+    {{ printf "%d:%02d" $minutes $seconds }}
+  </td>
+</tr>
+{{ end }}
+</tbody>
+</table>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      const table = document.querySelector('table');
+      const tbody = document.getElementById('tracks-tbody');
+      const searchInput = document.getElementById('playlist-search');
+      const sortSelect = document.getElementById('sort-select');
+      const resetButton = document.getElementById('reset-sort');
+      const trackCount = document.getElementById('track-count');
+      const noResults = document.getElementById('no-results');
+
+      let originalRows = Array.from(tbody.querySelectorAll('tr'));
+      let currentSort = { column: 'default', direction: 'asc' };
+
+      // Search functionality
+      searchInput.addEventListener('input', function() {
+          const searchTerm = this.value.toLowerCase();
+          const rows = tbody.querySelectorAll('tr');
+          let visibleCount = 0;
+
+          rows.forEach(row => {
+              const title = row.getAttribute('data-title');
+              const artist = row.getAttribute('data-artist');
+              const album = row.getAttribute('data-album');
+
+              const matches = title.includes(searchTerm) ||
+                             artist.includes(searchTerm) ||
+                             album.includes(searchTerm);
+
+              row.style.display = matches ? '' : 'none';
+              if (matches) visibleCount++;
+          });
+
+          trackCount.textContent = `${visibleCount} ${visibleCount === 1 ? 'track' : 'tracks'}`;
+          noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+      });
+
+      // Sort functionality
+      function sortTable(column, direction) {
+          const rows = Array.from(tbody.querySelectorAll('tr'));
+
+          rows.sort((a, b) => {
+              let aValue, bValue;
+
+              switch(column) {
+                  case 'title':
+                      aValue = a.getAttribute('data-title');
+                      bValue = b.getAttribute('data-title');
+                      break;
+                  case 'artist':
+                      aValue = a.getAttribute('data-artist');
+                      bValue = b.getAttribute('data-artist');
+                      break;
+                  case 'album':
+                      aValue = a.getAttribute('data-album');
+                      bValue = b.getAttribute('data-album');
+                      break;
+                  case 'duration':
+                      aValue = parseInt(a.getAttribute('data-duration'));
+                      bValue = parseInt(b.getAttribute('data-duration'));
+                      break;
+                  default:
+                      return 0;
+              }
+
+              if (direction === 'asc') {
+                  return aValue > bValue ? 1 : -1;
+              } else {
+                  return aValue < bValue ? 1 : -1;
+              }
+          });
+
+          rows.forEach(row => tbody.appendChild(row));
+      }
+
+      // Sort select change
+      sortSelect.addEventListener('change', function() {
+          const column = this.value;
+          if (column === 'default') {
+              resetSort();
+          } else {
+              currentSort.column = column;
+              currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+              sortTable(column, currentSort.direction);
+              updateSortIndicators();
+          }
+      });
+
+      // Header click handlers for sorting
+      const headers = table.querySelectorAll('th[data-sort]');
+      headers.forEach(header => {
+          header.addEventListener('click', function() {
+              const column = this.getAttribute('data-sort');
+              if (column === 'default') {
+                  resetSort();
+              } else {
+                  if (currentSort.column === column) {
+                      currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+                  } else {
+                      currentSort.column = column;
+                      currentSort.direction = 'asc';
+                  }
+                  sortTable(column, currentSort.direction);
+                  updateSortIndicators();
+
+                  // Update the select dropdown to match
+                  sortSelect.value = column;
+              }
+          });
+      });
+
+      // Reset sort
+      resetButton.addEventListener('click', resetSort);
+
+      function resetSort() {
+          const tbody = table.querySelector('tbody');
+          originalRows.forEach(row => tbody.appendChild(row));
+          currentSort = { column: 'default', direction: 'asc' };
+          updateSortIndicators();
+          sortSelect.value = 'default';
+      }
+
+      function updateSortIndicators() {
+          const headers = table.querySelectorAll('th[data-sort]');
+          headers.forEach(header => {
+              const icon = header.querySelector('.sort-icon');
+              if (header.getAttribute('data-sort') === currentSort.column) {
+                  icon.style.transform = currentSort.direction === 'asc' ? 'rotate(180deg)' : 'rotate(0deg)';
+              } else {
+                  icon.style.transform = 'rotate(0deg)';
+              }
+          });
+      }
+  });
+</script>

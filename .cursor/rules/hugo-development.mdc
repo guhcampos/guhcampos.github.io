@@ -1,0 +1,42 @@
+# Hugo Development Guide
+
+## Hugo Site Structure
+- All Hugo content is in [hugo/](mdc:hugo/) directory
+- Configuration in [hugo/hugo.toml](mdc:hugo/hugo.toml)
+- Theme is managed as git submodule in [hugo/themes/](mdc:hugo/themes/)
+- Layouts in [hugo/layouts/](mdc:hugo/layouts/)
+- Content in [hugo/content/](mdc:hugo/content/) (if exists)
+
+## Build Process
+- Use Python CLI: `uv run guhcampos build` to build Hugo site
+- Use Python CLI: `uv run guhcampos serve` to serve locally
+- Build output goes to [hugo/public/](mdc:hugo/public/)
+- Generated content (Spotify playlists) goes to [build/](mdc:build/)
+
+## Configuration
+- Hugo configuration in [hugo/config/_default/](mdc:hugo/config/_default/)
+- Environment-specific configs in [hugo/config/](mdc:hugo/config/)
+- Theme configuration in [hugo/themes/blowfish/](mdc:hugo/themes/blowfish/)
+
+## Content Integration
+- Spotify playlists are fetched and saved as M3U files
+- Content can be generated from external APIs
+- Use Hugo shortcodes for dynamic content
+- Static assets in [hugo/static/](mdc:hugo/static/) (if exists)
+
+## Development Workflow
+1. Edit Hugo content in [hugo/](mdc:hugo/) directory
+2. Use Python tools to fetch external content
+3. Build with `uv run guhcampos build`
+4. Test locally with `uv run guhcampos serve`
+5. Deploy via GitHub Actions
+
+## Key Files
+- [hugo/hugo.toml](mdc:hugo/hugo.toml) - Main Hugo configuration
+- [hugo/layouts/](mdc:hugo/layouts/) - Custom layouts and templates
+- [hugo/archetypes/](mdc:hugo/archetypes/) - Content templates
+- [.gitmodules](mdc:.gitmodules) - Theme submodule configuration
+description:
+globs:
+alwaysApply: false
+---

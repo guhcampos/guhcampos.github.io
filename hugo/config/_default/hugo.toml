@@ -1,0 +1,33 @@
+baseURL = 'https://guhcampos.github.io/'
+languageCode = 'en'
+defaultContentLanguage = 'en'
+title = 'Gustavo Campos'
+# sectionPagesMenu = "main"
+
+themesDir = "themes"
+theme = "blowfish"
+
+enableRobotsTXT = true
+summaryLength = 0
+
+[module]
+  [[module.imports]]
+    path = "blowfish"
+    disable = false
+
+  [[module.mounts]]
+    source = 'static/playlists'
+    target = 'data/playlists'
+    includeFiles = ['*.json']
+
+[pagination]
+  pagerSize = 10
+
+[taxonomies]
+  series = "series"
+  tag = "tags"
+  # topic = "topics"
+
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]

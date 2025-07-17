@@ -1,0 +1,19 @@
+contentDir = "content/en"
+languageCode = "en"
+languageName = "English"
+title = "guhcampos"
+weight = 1
+
+[params]
+displayName = "en"
+isoCode = "en"
+rtl = false
+dateFormat = "January 2, 2006"
+description = "Guhcampos Digital Garden"
+
+  [params.author]
+  name = "Gustavo Campos"
+  email = "guhcampos@gmail.com"
+  headline = "Brazilian, Millenial, Tinkerer, SCUBA diver, Nerd."
+  bio = "Brazilian, Millenial, Tinkerer, Nerd. I write about random stuff and for some reason I decided to start publishing it."
+

@@ -1,0 +1,53 @@
+# Testing Standards
+
+## Test Structure
+- All tests in [tests/](mdc:tests/) directory
+- Use pytest as testing framework
+- Follow naming convention: `test_*.py` files
+- Use descriptive test function names
+
+## Mocking Patterns
+- Mock external APIs (Spotify, HTTP requests)
+- Use `@patch` decorator for dependency injection
+- Mock file system operations with `tmp_path` fixture
+- Create realistic mock data for pagination testing
+
+## File Operations
+- Always use `tmp_path` fixture for file output
+- Never write to repository root in tests
+- Clean up temporary files automatically
+- Test both file creation and content validation
+
+## API Testing
+- Mock HTTP responses with realistic data
+- Test pagination logic with multiple mock responses
+- Test error scenarios and exception handling
+- Validate response parsing and model creation
+
+## Test Data
+- Use Pydantic models for test data validation
+- Create realistic mock responses matching API format
+- Test edge cases (empty responses, pagination boundaries)
+- Use valid URLs for HttpUrl validation
+
+## Assertions
+- Test both success and failure paths
+- Validate data types and model instances
+- Check function call counts and parameters
+- Verify file content and format
+
+## Test Organization
+- Group related tests in same file
+- Use descriptive docstrings for test functions
+- Test one concept per test function
+- Use setup/teardown when needed
+
+## Key Examples
+- [tests/test_spotify.py](mdc:tests/test_spotify.py) - Spotify API testing
+- Pagination testing with realistic mock data
+- File output testing with `tmp_path`
+- Model validation testing
+description:
+globs:
+alwaysApply: false
+---

@@ -1,0 +1,58 @@
+# CLI Development Guide
+
+## CLI Structure
+- Main CLI entry point: [src/guhcampos/cli.py](mdc:src/guhcampos/cli.py)
+- Uses Click framework for command-line interface
+- Entry point defined in [pyproject.toml](mdc:pyproject.toml) as `guhcampos`
+
+## Command Organization
+- Main group: `guhcampos` with subcommands
+- Keep CLI logic minimal, delegate to business logic
+
+## CLI Patterns
+- Use Click groups for command organization
+- Import pre-baked functions, not direct class instantiation
+- Use Rich for console output and progress bars
+- Handle errors gracefully with user-friendly messages
+
+## Command Structure
+```python
+@guhcampos.command()
+def build():
+    """Build the Hugo site"""
+    # Minimal CLI logic
+    # Call business logic functions
+```
+
+## Error Handling
+- Catch exceptions and provide helpful error messages
+- Use Rich console for colored output
+- Validate inputs before processing
+- Provide usage examples in docstrings
+
+## Configuration
+- Use environment variables for sensitive data
+- Load configuration from [src/guhcampos/settings.py](mdc:src/guhcampos/settings.py)
+- Support both required and optional parameters
+- Use Click options for configuration
+
+## User Experience
+- Provide progress feedback for long-running operations
+- Use descriptive command and option names
+- Include help text for all commands
+- Support both interactive and non-interactive modes
+
+## Testing CLI
+- Test CLI commands with mocked dependencies
+- Verify correct function calls and parameters
+- Test error handling and user feedback
+- Use Click's testing utilities when needed
+
+## Key Commands
+- `guhcampos build` - Build Hugo site
+- `guhcampos spotify list-playlists` - List Spotify playlists
+- `guhcampos spotify fetch-playlists` - Fetch playlists into M3U and JSON files
+description:
+globs:
+alwaysApply: false
+---

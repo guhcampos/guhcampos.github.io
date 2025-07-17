@@ -1,0 +1,43 @@
+# Python Development Standards
+
+## Code Style
+- Use Black for formatting (88 character line length)
+- Use Ruff for linting and import sorting
+- Follow type hints with Pydantic models
+- Use `uv` for dependency management
+
+## Project Structure
+- All Python code goes in [src/guhcampos/](mdc:src/guhcampos/)
+- Tests go in [tests/](mdc:tests/)
+- Use Pydantic models for data validation
+- Keep CLI logic separate from business logic
+
+## Testing
+- Use pytest with `tmp_path` fixture for file operations
+- Mock external APIs (Spotify, etc.)
+- Test both success and failure scenarios
+- Use descriptive test names and docstrings
+
+## Dependencies
+- Core dependencies in [pyproject.toml](mdc:pyproject.toml)
+- Development dependencies include pytest, ruff, black
+- Use Pydantic for data models and validation
+- Use Click for CLI interface
+- Use Rich for console output
+
+## Key Patterns
+- Use generators for pagination (Spotify API)
+- Use Pydantic models for API responses
+- Use pathlib.Path for file operations
+- Use environment variables for configuration
+- Use logging/console output for user feedback
+
+## File Organization
+- [src/guhcampos/cli.py](mdc:src/guhcampos/cli.py) - CLI entry points only
+- [src/guhcampos/core.py](mdc:src/guhcampos/core.py) - Core utilities
+- [src/guhcampos/spotify/](mdc:src/guhcampos/spotify/) - Spotify integration
+- [src/guhcampos/settings.py](mdc:src/guhcampos/settings.py) - Configuration
+description:
+globs:
+alwaysApply: false
+---

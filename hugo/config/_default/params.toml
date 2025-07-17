@@ -1,0 +1,115 @@
+colorScheme = "ocean"
+defaultAppearance = "light"
+autoSwitchAppearance = true
+enableSearch = true
+enableCodeCopy = true
+replyByEmail = false
+mainSections = [ "Resources", "Topics", "Lists", "Tutorials" ]
+disableImageOptimization = false
+disableTextInHeader = false
+giteaDefaultServer = "https://git.fsfe.org"
+forgejoDefaultServer = "https://v8.next.forgejo.org"
+firebase = { }
+fathomAnalytics = { }
+umamiAnalytics = { }
+selineAnalytics = { }
+buymeacoffee = { }
+verification = { }
+rssnext = { }
+highlightCurrentMenuArea = ""
+smartTOC = true
+[author]
+
+[[author.links]]
+github = "https://github.com/guhcampos"
+gitlab = "https://gitlab.com/guhcampos"
+instagram = "https://www.instagram.com/guhcampos.stuff/"
+lastfm = "https://www.last.fm/user/guhcampos"
+linkedin = "https://www.linkedin.com/in/gucampos/"
+reddit = "https://www.reddit.com/user/guhcampos/"
+spotify = "https://open.spotify.com/user/12132336829"
+steam = "https://steamcommunity.com/id/guhcampos/"
+
+[header]
+layout = "fixed-fill-blur"
+
+[footer]
+showMenu = true
+showCopyright = true
+showThemeAttribution = true
+showAppearanceSwitcher = true
+showScrollToTop = true
+
+[homepage]
+layout = "profile"
+showRecent = false
+showRecentItems = 5
+showMoreLink = false
+showMoreLinkDest = "/posts/"
+cardView = false
+cardViewScreenWidth = false
+layoutBackgroundBlur = false
+
+[article]
+editAppendPath = true
+invertPagination = false
+layoutBackgroundBlur = true
+layoutBackgroundHeaderSpace = true
+seriesOpened = true
+showAuthor = false
+showAuthorsBadges = true
+showBreadcrumbs = false
+showCategoryOnly = false
+showDate = true
+showDateOnlyInArticle = true
+showDateUpdated = true
+showDraftLabel = true
+showEdit = false
+showHeadingAnchors = true
+showHero = true
+showLikes = false
+showPagination = true
+showReadingTime = true
+showTableOfContents = false
+showTaxonomies = true
+showViews = false
+showWordCount = true
+showZenMode = false
+
+[list]
+showHero = true
+layoutBackgroundBlur = true
+layoutBackgroundHeaderSpace = true
+showBreadcrumbs = false
+showSummary = false
+showViews = false
+showLikes = false
+showTableOfContents = false
+showCards = true
+orderByWeight = false
+groupByYear = true
+cardView = true
+cardViewScreenWidth = false
+constrainItemsWidth = false
+
+[sitemap]
+excludedKinds = [ "taxonomy", "term" ]
+
+[taxonomy]
+showTermCount = true
+showHero = true
+showBreadcrumbs = false
+showViews = false
+showLikes = false
+showTableOfContents = false
+cardView = false
+
+[term]
+showHero = true
+showBreadcrumbs = false
+showViews = false
+showLikes = false
+showTableOfContents = true
+groupByYear = false
+cardView = false
+cardViewScreenWidth = false
