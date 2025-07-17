@@ -52,8 +52,12 @@ jobs:
       - name: install python dependencies
         run: uv sync --locked --all-extras --dev
 
+      - name: copy obsidian content
+        run: uv run guhcampos obsidian pull
+      - name: fetch spotify playlists
+        run: uv run guhcampos spotify fetch-playlists
       - name: build website
-        run: uv run build
+        run: uv run guhcampos hugo build
 
       - name: setup Pages
         id: pages
