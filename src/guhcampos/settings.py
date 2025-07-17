@@ -26,8 +26,19 @@ class Settings(BaseSettings):
     spotify_user_id: str
     spotify_playlists: list[str] = [
         "This is Guhcampos",
+        "80's Stuff the Nice and the Ugly",
         "Beard Growing",
         "Banda Indie Canta Hey!",
+        "Breathe",
+        "Dirty Rockin",
+        "Esquerda Festiva",
+        "Everybody Loves Covers",
+        "Funksouzera",
+        "Hot and Hard",
+        "Metalheads in Love",
+        "Powerzera",
+        "Rebolation",
+        "Smooth Talkin",
     ]
     spotify_playlists_output_dir: Path = REPO_ROOT / "hugo" / "static" / "playlists"
 
