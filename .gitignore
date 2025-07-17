@@ -83,7 +83,16 @@ hugo_stats.json
 hugo.darwin
 hugo.exe
 hugo.linux
+hugo/.hugo_build.lock
+hugo/content/
 hugo/data/playlists/
+hugo/logs/
+hugo/public/
+hugo/public/
+hugo/resources/_gen/
+hugo/resources/_gen/
+hugo/site/
+hugo/site/
 instance/
 ipython_config.py
 lib/
