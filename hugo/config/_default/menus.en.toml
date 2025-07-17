@@ -13,12 +13,6 @@ parent = "Music"
 pageRef = "playlists"
 weight = 30
 
-
-[[main]]
-name = "About"
-pageRef = "about"
-weight = 50
-
 # ----------------
 
 [[footer]]
