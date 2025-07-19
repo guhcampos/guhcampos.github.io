@@ -22,13 +22,13 @@ if the visitor wants to find a specific track of ensure it's on the list.
     </th>
     <th class="px-6 text-xs text-neutral-500 dark:text-neutral-400 uppercase cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-600" data-sort="album">
       <p class="flex items-left">
-        <span class="relative block"></span>{{ i18n "playlists.album" | default "Album" }}</span>
+        <span class="relative block">{{ i18n "playlists.album" | default "Album" }}</span>
         {{/*  {{ partial "icon.html" "table-sort" }}  */}}
       </p>
     </th>
-    <th class="px-6 text-xs text-neutral-500 dark:text-neutral-400 uppercase cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-600" data-sort="album">
+    <th class="px-6 text-xs text-neutral-500 dark:text-neutral-400 uppercase cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-600" data-sort="duration">
       <p class="flex items-left">
-        <span class="relative block"></span>{{ i18n "playlists.duration" | default "Time" }}</span>
+        <span class="relative block">{{ i18n "playlists.duration" | default "Time" }}</span>
         {{/*  {{ partial "icon.html" "table-sort" }}  */}}
       </p>
     </th>
@@ -204,5 +204,26 @@ $track_duration_seconds 60 | int }}
               }
           });
       }
+
+            // M3U Download function
+      window.downloadM3U = function() {
+          const playlistTracks = {{ $.Params.tracks | jsonify }};
+          let m3uContent = '#EXTM3U\n';
+
+          playlistTracks.forEach(track => {
+              m3uContent += `#EXTINF:-1,${track.name} - ${track.artists[0]}\n`;
+              m3uContent += `${track.name} - ${track.artists[0]}\n`;
+          });
+
+          const blob = new Blob([m3uContent], { type: 'text/plain' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = '{{ $.Title | urlize }}.m3u';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+      };
   });
 </script>

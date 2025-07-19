@@ -1,0 +1,55 @@
+{{/*
+
+Controls section for playlist display, including search, sort, and download options.
+
+*/}}
+
+<div class="mb-6 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+  <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+
+    <div class="flex flex-col sm:flex-row gap-4 ">
+      <div class="relative">
+        <input type="text" id="playlist-search" placeholder="Search..." class="w-full sm:w-64 text-sm border rounded-lg">
+      </div>
+      <div class="flex gap-2">
+        <select id="sort-select" class="px-3 py-2 text-sm rounded-lg">
+          <option value="default">Sort by...</option>
+          <option value="title">Title</option>
+          <option value="artist">Artist</option>
+          <option value="album">Album</option>
+          <option value="duration">Duration</option>
+        </select>
+        <button id="reset-sort" class="px-3 py-2 text-sm rounded-lg border ml-3">Reset</button>
+      </div>
+    </div>
+
+    <!-- Download Buttons -->
+    {{/*  <div class="flex gap-3">
+      <!-- M3U Download -->
+      <a href="javascript:void(0)" onclick="downloadM3U()" class="inline-flex items-center justify-center w-16 px-3 py-2 text-sm border rounded-lg cursor-pointer">
+        <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+        </svg>
+        M3U
+      </a>
+
+      <!-- JSON Download -->
+      <a
+        href="data:application/json;charset=utf-8,{{ $.Params.tracks | jsonify }}" download="{{ $.Title | urlize }}.json"
+        class="inline-flex items-center justify-center w-16 px-3 py-2 text-sm border rounded-lg cursor-pointer ml-2">
+        <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+        </svg>
+        JSON
+      </a>
+    </div>  */}}
+  </div>
+
+  <!-- Track Count and No Results Message -->
+  <div class="mt-3 flex items-center justify-between text-sm text-neutral-600 dark:text-neutral-400">
+    <span id="track-count">{{ len $.Params.tracks }} {{ if eq (len $.Params.tracks) 1 }}track{{ else }}tracks{{ end }}</span>
+    <div id="no-results" class="hidden text-red-600 dark:text-red-400">
+      No tracks match your search
+    </div>
+  </div>
+</div>

@@ -95,6 +95,7 @@ where the visitor can listen to the song previews on the playlist.
 
         <div class="article-content  mb-20">
           <div class="from-primary-500 to-secondary-500 rounded-lg p-6 text-white" data-playlist-id="{{ $.Params.id }}">
+            {{ partial "playlists/playlist-controls.html" . }}
             {{ partial "playlists/playlist-table.html" . }}
           </div>
         </div>
