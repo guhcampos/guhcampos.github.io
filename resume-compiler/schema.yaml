@@ -1,0 +1,205 @@
+schema_version: 1
+identity:
+  name: Gustavo Campos Ferreira Guimarães
+  title: Software Engineering, SRE, Distributed Systems
+  email: guhcampos@gmail.com
+  phone: +55 31 98896 0666
+  location: Belo Horizonte, Brazil
+  linkedin: https://www.linkedin.com/in/gucampos/
+summary: null
+engagements:
+- note_id: 80.03.01
+  name: Telbrax
+  title: Networking Engineer
+  start_date: 2009-05
+  end_date: 2011-04
+  location: null
+  industry: null
+  bullets:
+  - Planned, designed and implemented the company’s server consolidation program
+  - Coordinated teams for incident response both for security and service shortages
+  - Participated on the initial design and Implementation the company’s IP backbone
+  achievements:
+  - title: Telbrax Entry into IP Services Market
+    bullets: []
+- note_id: 80.03.02
+  name: Jasper Design Automation
+  title: System Engineer
+  start_date: 2011-04
+  end_date: 2014-05
+  location: null
+  industry: null
+  bullets:
+  - Designed, deployed and managed the whole IT infrastructure for the Brazilian office’s 200% growth in 4 years
+  - Managed and upgraded the whole company compute infrastructure, spread between Brazil, US, Sweden and Israel
+  - Jumpstarted the continuous integration philosophy in the company and built several internal tools to automate and integrate development workflows, mostly written in python
+  - Travelled between Brazil, the USA and Sweden to deploy and upgrade infrastructure projects
+  achievements:
+  - title: Jasper Compute Farm in Brazil
+    bullets: []
+  - title: Jasper Infrastructure Compliance
+    bullets: []
+- note_id: 80.03.03
+  name: Cadence
+  title: Staff Systems Engineer
+  start_date: 2014-06
+  end_date: 2017-11
+  location: null
+  industry: null
+  bullets:
+  - Developed a containerized build system for legacy code which led to an order of magnitude gains in compilation time.
+  - in Re-engineered the company’s data pipelines from legacy, EOL proprietary software to a fully cloud-ready ElasticSearch based stack.
+  - Responsible for deployment and support of a large portion of the company’s HPC nodes, both on-premises and in multiple cloud providers (3000+ machines).
+  - During Cadence’s acquisition of Jasper, I was Jasper’s champion for infrastructure and application migration worldwide.
+  - Also on Cadence’s M&A of Jasper, negotiated, procured and installed all infrastructure improvements and compliance for the Brazilian office.
+  achievements:
+  - title: Jasper M&A into Cadence Design Systems
+    bullets: []
+  - title: Jasper Tooling Integration into Cadence
+    bullets: []
+  - title: Jasper Compute Farm Integration into Cadence
+    bullets: []
+  - title: Cadence
+    bullets: []
+- note_id: 80.03.04
+  name: NVXL
+  title: Senior Software Engineer
+  start_date: 2017-11
+  end_date: 2019-01
+  location: null
+  industry: null
+  bullets:
+  - NVXL attempted to launch a polymorphic acceleration platform, based around Python+OpenCL on hybrid computing devices (CPU, GPU, FPGA) which included both the hardware and software solutions
+  - 'Personally, I worked at the software on two main fronts: distributed computing of ML models and containerization of such workloads'
+  - Briefly worked on the attempted adaptation of the software layer for genomics workloads based on GATK
+  - Designed, developed and nurtured the Continuous Integration and software release processes, configuration and infrastructure
+  achievements:
+  - title: NVXL Abstraction Layer
+    bullets: []
+  - title: NVXL Kubernetes Driver
+    bullets: []
+  - title: NVXL
+    bullets: []
+- note_id: 80.03.05
+  name: Maio Marketing
+  title: Software Engineering Lead
+  start_date: 2019-03
+  end_date: null
+  location: null
+  industry: null
+  bullets:
+  - Hired and lead the software engineering team tasked with creating the main product
+  - Designed a Customer Data Platform architecture based on Apache Kafka and Clickhouse designed to compete directly with segment.com
+  - Interfaced with our team of PhD staticians to deploy ML models on our Kubernetes clusters
+  - Worked on building a product-oriented culture until company was split between partners
+  achievements:
+  - title: Maio Release of Dataview
+    bullets: []
+- note_id: 80.03.06
+  name: Smarttbot
+  title: Software Engineering Lead
+  start_date: 2019-12
+  end_date: 2021-10
+  location: null
+  industry: Finance
+  bullets:
+  - Refactoring current architecture to increase scalability in two orders of magnitude
+  - Leading the team responsible for the internal robot SDK
+  - Leading the migration of select components to Kubernetes with substantial cost cut
+  - Achieved 20-fold reduction in trading latency by reducing market data delays
+  achievements:
+  - title: Smarttbot Transition to Home Office
+    bullets: []
+  - title: Smarttbot Trade Streamer
+    bullets: []
+  - title: Smarttbot Kubernetes Operator
+    bullets:
+    - They needed to stay up and running reliably, but only during the market hours
+    - They could run for a period of time and finish due to a stop signal, in which case they would only be rescheduled the next day
+    - Two instances of a bot absolutely must not run at the same time
+- note_id: 80.03.07
+  name: CERC
+  title: Site Reliability Engineer
+  start_date: 2021-11
+  end_date: null
+  location: null
+  industry: null
+  bullets:
+  - Lead the implementation of Observability principles in an heterogeneous Market Infrastructure Ecosystem handling more than half of Brazil credit card transactions
+  - Mentor internal and outsourced development teams in adopting Observability
+  - Implemented drift detection and cloud cost-saving measures over several Google Cloud projects
+  achievements:
+  - title: CERC Semi-Automatic Tagging Application
+    bullets: []
+  - title: CERC FinOps Initiative
+    bullets: []
+  - title: CERC Observability Implementation as OTEL
+    bullets: []
+- note_id: 80.03.08
+  name: Hotjar
+  title: Senior Site Reliability Engineer
+  start_date: 2022-11
+  end_date: null
+  location: null
+  industry: null
+  bullets:
+  - Bootstrapping SRE as a product practice in Hotjar, moving from classic Devops
+  - Refactoring company systems and processes to support SRE engagement
+  - Developing SLOs and implementing monitoring to track respective SLIs
+  - Sharing lead over incident management  and process improvement
+  achievements:
+  - title: Hotjar Migration to Kubernetes 1.22
+    bullets: []
+  - title: Hotjar's Hotjar-system
+    bullets: []
+  - title: Hotjar Migration to Datadog Vector
+    bullets: []
+- note_id: 80.03.09
+  name: ContentSquare
+  title: null
+  start_date: null
+  end_date: null
+  location: null
+  industry: null
+  bullets: []
+  achievements:
+  - title: Automation of Kafka Upgrades in ContentSquare
+    bullets: []
+- note_id: 80.03.10
+  name: Upwork
+  title: null
+  start_date: null
+  end_date: null
+  location: null
+  industry: null
+  bullets: []
+  achievements: []
+skills_groups:
+- name: Soft skills
+  skills:
+  - name: Communication
+    detail: []
+  - name: Decision Making
+    detail: []
+  - name: Initiative
+    detail: []
+  - name: Organization
+    detail: []
+  - name: Time Management
+    detail: []
+  - name: Flexibility
+    detail: []
+  - name: Leadership
+    detail: []
+  - name: Problem Solving
+    detail: []
+education:
+- school: UFMG - Universidade Federal de Minas Gerais
+  degree: BSc in Information Systems
+  start_year: '2009'
+  end_year: '2013'
+  location: null
+extras:
+  opensource: []
+  volunteering: []
+  teaching: []

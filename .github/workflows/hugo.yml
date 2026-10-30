@@ -2,6 +2,9 @@ name: build guhcampos.github.io
 
 on:
   push:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [resume-schema-change]
 
 permissions:
   contents: read
@@ -18,6 +21,9 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
     env:
       GUHCAMPOS_OBSIDIAN_VAULT_ROOT: ${{ github.workspace }}/obsidian-vault
       GUHCAMPOS_SPOTIFY_CLIENT_ID: ${{ secrets.GUHCAMPOS_SPOTIFY_CLIENT_ID }}
@@ -58,8 +64,31 @@ jobs:
         run: uv run guhcampos obsidian pull
       - name: fetch spotify playlists
         run: uv run guhcampos spotify fetch-playlists
+
+      - name: render resume page from schema
+        working-directory: resume-compiler
+        run: |
+          PYTHONPATH=src uv run --no-project \
+            --with 'pyyaml>=6' --with 'jinja2>=3.1' \
+            python render_page.py \
+            --schema schema.yaml \
+            --output ../hugo/static/resume/index.html
+
       - name: build website
         run: uv run guhcampos hugo build
+
+      - name: commit regenerated resume page
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f hugo/static/resume/index.html
+          if git diff --cached --quiet; then
+            echo "resume page unchanged"
+          else
+            git commit -m "resume: regenerate index.html from schema (deterministic render)"
+            git push
+          fi
 
       - name: setup Pages
         id: pages

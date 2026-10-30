@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="generator" content="resume-compiler"/>
+<meta name="color-scheme" content="light dark"/>
+<title>{{ identity.name }} — Resume</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --bg: #fdfdfd;
+  --ink: #22252a;
+  --muted: #59626d;
+  --head: #111418;
+  --rule: #dcdfe3;
+  --chip: #f0f2f5;
+  --chip-ink: #2c3036;
+  --mono: ui-monospace, "JetBrains Mono", "Victor Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15181d;
+    --ink: #e6e8ea;
+    --muted: #9aa3ad;
+    --head: #f5f6f7;
+    --rule: #31363d;
+    --chip: #20252c;
+    --chip-ink: #cdd2d8;
+  }
+}
+@media print {
+  :root {
+    --bg: #ffffff;
+    --ink: #000000;
+    --muted: #444444;
+    --head: #000000;
+    --rule: #bbbbbb;
+    --chip: #f1f1f1;
+    --chip-ink: #111111;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.5 var(--sans);
+}
+main {
+  max-width: 47rem;
+  margin: 0 auto;
+  padding: 2.25rem 1.25rem 3rem;
+}
+header { margin-bottom: 0; }
+h1 {
+  margin: 0;
+  font-size: 1.85rem;
+  line-height: 1.12;
+  letter-spacing: .01em;
+  color: var(--head);
+  overflow-wrap: anywhere;
+}
+.headline {
+  margin: .45em 0 .5em;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+.contact {
+  margin: 0 0 .35em;
+  color: var(--muted);
+  font-size: .9rem;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: .45rem;
+  row-gap: .25rem;
+}
+.contact > * { white-space: nowrap; }
+.contact > * + *::before { content: "·"; margin-right: .45rem; color: var(--muted); }
+.contact a { color: inherit; text-decoration: none; }
+section { margin-top: 2.1rem; }
+section > h2 {
+  margin: 0 0 1.1rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--rule);
+  font-size: 1rem;
+  font-weight: 650;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--head);
+  break-after: avoid;
+  page-break-after: avoid;
+}
+.engagement { margin: 0 0 1.7rem; }
+.erow {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: .8rem;
+  align-items: baseline;
+}
+.engagement h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.3;
+  color: var(--head);
+  break-after: avoid;
+  page-break-after: avoid;
+}
+.role { font-weight: 500; color: var(--ink); }
+.dates {
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: .82rem;
+  white-space: nowrap;
+}
+.engagement ul, .achievement ul {
+  margin: .55rem 0 0;
+  padding-left: 1.2rem;
+}
+.engagement li, .achievement li {
+  margin: .22rem 0;
+  overflow-wrap: break-word;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.achievement { margin-top: .8rem; }
+.achievement h4 {
+  margin: .2rem 0 0;
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--head);
+  break-after: avoid;
+  page-break-after: avoid;
+}
+.achievement h4:last-child { break-after: auto; page-break-after: auto; }
+.skills ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem .45rem;
+  margin: 0;
+  padding: 0;
+}
+.skills ul.skills-detailed {
+  display: block;
+  list-style: disc;
+  padding-left: 1.2rem;
+}
+.skills-group-name {
+  margin: .9rem 0 .35rem;
+  font-size: .95rem;
+  color: var(--head);
+}
+.skills-detailed h4 {
+  margin: .3rem 0 .1rem;
+  font-size: .92rem;
+  color: var(--head);
+  break-after: avoid;
+  page-break-after: avoid;
+}
+.skills-detailed ul { padding-left: 1.2rem; color: var(--ink); }
+.skills .chip {
+  padding: .16rem .55rem;
+  border: 1px solid var(--rule);
+  border-radius: .35rem;
+  background: var(--chip);
+  color: var(--chip-ink);
+  font-size: .83rem;
+}
+.skills li h4 {
+  margin: 0 0 .3rem;
+  font-size: .95rem;
+  color: var(--head);
+}
+.degree { margin: .3rem 0 0; }
+.education-entry { margin: 0 0 1rem; }
+.education-entry h3 {
+  margin: 0;
+  font-size: 1.03rem;
+  color: var(--head);
+}
+.education-entry .dates { margin-top: .1rem; display: block; }
+.extras-entry { margin: 0 0 .9rem; }
+.extras-entry h3 {
+  margin: 0;
+  font-size: .98rem;
+  color: var(--head);
+}
+@media print {
+  @page { size: A4; margin: 13mm 15mm; }
+  body { font-size: 10.5pt; line-height: 1.42; }
+  main { max-width: none; padding: 0; }
+  h1 { font-size: 17pt; }
+  section { margin-top: 1.15rem; }
+  section > h2 { margin-bottom: .65rem; padding-bottom: .15rem; }
+  .engagement { margin-bottom: .95rem; }
+  .contact, .headline, .dates, .education-entry, .extras-entry
+    { break-after: avoid; page-break-after: avoid; }
+  .contact { margin: .1em 0 .25em; font-size: 9pt; }
+  .erow { break-after: avoid; page-break-after: avoid; }
+}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>{{ identity.name }}</h1>
+{% if identity.title %}
+<p class="headline">{{ identity.title }}</p>
+{% endif %}
+<p class="contact">
+{%- for item in contact_items %}
+  {%- if item.href %}
+  <a href="{{ item.href }}">{{ item.text }}</a>
+  {%- else %}
+  <span>{{ item.text }}</span>
+  {%- endif %}
+{%- endfor %}
+</p>
+</header>
+
+{% if summary %}
+<section id="summary">
+<h2>Summary</h2>
+<p>{{ summary }}</p>
+</section>
+{% endif %}
+
+{% if engagements %}
+<section id="experience">
+<h2>Experience</h2>
+{% for e in engagements %}
+<article class="engagement">
+<div class="erow">
+<h3>{{ e.name }}{% if e.title %}<span class="role"> · <strong>{{ e.title }}</strong></span>{% endif %}</h3>
+{% if e.start_date or e.end_date %}
+<p class="dates">{{ date_range(e) }}{% if e.location %} · {{ e.location }}{% endif %}{% if e.industry %} · {{ e.industry }}{% endif %}</p>
+{% elif e.location %}
+<p class="dates">{{ e.location }}</p>
+{% endif %}
+</div>
+{% if e.bullets %}
+<ul>
+{% for b in e.bullets %}
+<li>{{ b }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+{% for a in e.achievements %}
+<div class="achievement">
+{% if a.title %}<h4>{{ a.title }}</h4>{% endif %}
+{% if a.bullets %}
+<ul>
+{% for b in a.bullets %}
+<li>{{ b }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+</div>
+{% endfor %}
+</article>
+{% endfor %}
+</section>
+{% endif %}
+
+{% if skills_groups %}
+<section id="skills">
+<h2>Skills</h2>
+{% for group in skills_groups %}
+{% if group.name %}<h3 class="skills-group-name">{{ group.name }}</h3>{% endif %}
+{% set detailed = group.skills | selectattr("detail") | list %}
+{% set plain = group.skills | rejectattr("detail") | list %}
+{% if detailed %}
+<ul class="skills-detailed">
+{% for skill in detailed %}
+<li>
+<h4>{{ skill.name }}</h4>
+<ul>
+{% for d in skill.detail %}
+<li>{{ d }}</li>
+{% endfor %}
+</ul>
+</li>
+{% endfor %}
+</ul>
+{% endif %}
+{% if plain %}
+<ul class="skills-chips">
+{% for skill in plain %}
+<li><span class="chip">{{ skill.name }}</span></li>
+{% endfor %}
+</ul>
+{% endif %}
+{% endfor %}
+</section>
+{% endif %}
+
+{% if education %}
+<section id="education">
+<h2>Education</h2>
+{% for ed in education %}
+<div class="education-entry">
+<h3>{{ ed.school }}{% if ed.degree %} · <strong>{{ ed.degree }}</strong>{% endif %}</h3>
+{% if ed.start_year or ed.end_year %}
+<p class="dates">{% if ed.start_year %}{{ ed.start_year }}{% if ed.end_year and ed.start_year != ed.end_year %} – {{ ed.end_year }}{% endif %}{% else %}{{ ed.end_year }}{% endif %}{% if ed.location %} · {{ ed.location }}{% endif %}</p>
+{% elif ed.location %}
+<p class="dates">{{ ed.location }}</p>
+{% endif %}
+</div>
+{% endfor %}
+</section>
+{% endif %}
+
+{% for group_name, group_key in [("Open Source", "opensource"), ("Volunteering", "volunteering"), ("Teaching", "teaching")] %}
+{% if extras.get(group_key) %}
+<section id="{{ group_key }}">
+<h2>{{ group_name }}</h2>
+{% for entry in extras.get(group_key) %}
+<div class="extras-entry">
+<h3>{{ entry.title }}{% if entry.start_date or entry.end_date %} <span class="dates">{{ date_range(entry) }}</span>{% endif %}</h3>
+{% if entry.bullets %}
+<ul>
+{% for b in entry.bullets %}
+<li>{{ b }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+</div>
+{% endfor %}
+</section>
+{% endif %}
+{% endfor %}
+</main>
+</body>
+</html>
